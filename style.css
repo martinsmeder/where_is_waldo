@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
+body {
+    background-image:url('/dist/images/background.jpg');
+    background-repeat: no-repeat;
+    background-position: top;
+    background-size: 100%;
+    height: auto;
+    height: 3947px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header {
+    color: #FFF;
+}
+
+footer {
+    color: #FFF;
+}
