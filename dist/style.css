@@ -1,47 +1,76 @@
-/* Remove the whitespace below the image */
-
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
 }
   
 #container {
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
+    width: 100%; 
+    min-height: 100vh; 
+    /* Establish a positioning context for absolute positioning of child elements */
+    position: relative; 
+    /* Hide any overflowing content within the container */
     overflow: hidden;
+    /* Remove whitespace due to line-height calculations */
+    line-height: 0; 
 }
   
 #content {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-  
-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.7); 
-    padding: 10px;
-    z-index: 1;
-}
-  
-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
-    padding: 10px;
-    z-index: 1;
-}
-  
-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    /* Establish a positioning context for child elements */
+    position: relative; 
+    width: 100%; 
+    height: 100%; 
 }
 
+/* ======================================== HEADER ========================================= */
+  
+header {
+    /* Position the header relative to the #content container */
+    position: absolute; 
+    /* Position the header at the top of the #content container */
+    top: 0; 
+    width: 100%; 
+    background-color: rgba(0, 0, 0, 0.7); 
+    padding: 20px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #FFF;
+    border-bottom: 2px solid #FFF;
+    box-shadow: 0 0 .9rem #FFF;
+}
+
+#dropdownMenu {
+    display: none; /* Initially hide the dropdown menu */
+    overflow: hidden; /* Hide any overflowing content within the dropdown menu */
+    /* transition: 0.3s ease-in; not working */
+}
+  
+#dropdownMenu.show {
+    display: flex; 
+    max-height: 500px; /* Set a maximum height for the dropdown menu */
+}
+
+.icon {
+    width: 150px;
+    height: 150px;
+}
+
+/* ======================================== FOOTER ========================================= */
+
+footer {
+    /* Position the footer relative to the #content container */
+    position: absolute; 
+    /* Position the footer at the bottom of the #content container */
+    bottom: 0;
+    width: 100%; 
+    background-color: rgba(255, 255, 255, 0.7); 
+    padding: 20px; 
+}
+  
+#backgroundImg {
+    width: 100%; 
+    height: 100%; 
+    /* Scale the image to cover the entire container while maintaining aspect ratio */
+    object-fit: cover; 
+}
