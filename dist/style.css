@@ -76,7 +76,7 @@ header {
     background-color: rgba(0, 0, 0, 0.7);
     padding: 20px;
     border-bottom: 1px solid #FFF;
-    z-index: 1; /* Ensure the dropdown is above other elements */
+
 }
   
 #dropdownMenu.show {
@@ -120,6 +120,8 @@ footer a {
     transform: scale(1.1);
     text-shadow: 0 0 .3rem #FFF;
 }
+
+/* ====================================== MISC ======================================= */
   
 #backgroundImg {
     width: 100%; 
@@ -127,3 +129,14 @@ footer a {
     /* Scale the image to cover the entire container while maintaining aspect ratio */
     object-fit: cover; 
 }
+
+.circle {
+    position: absolute;
+    background-color: red;
+    opacity: 0.8; /* Adjust the opacity value as desired */
+    border-radius: 50%;
+    width: 50px; /* Set a width and height for the circle */
+    height: 50px;
+    /* z-index: 1; */
+}
+
