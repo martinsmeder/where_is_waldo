@@ -15,21 +15,57 @@
                 <h1>FIND US</h1>
 
                 <div id="dropdownContainer">
-                    <button id="dropdownButton">Display Characters</button>
-                    <div id="dropdownMenu">
-                        <img src="/dist/images/bowser.png" class="icon" alt="Bowser">
-                        <img src="/dist/images/neo.png" class="icon" alt="Neo">
-                        <img src="/dist/images/waldo.png" class="icon" alt="Waldo">
-                    </div>
-                </div>
+                    <button id="dropdownButton">▼ Show Characters ▼</button>
 
-                <h2>00:00:00</h2>
-                
+                    <div id="dropdownMenu">
+                        <div class="character">
+                            <img src="/dist/images/bowser.png" class="icon" alt="Bowser">
+                            <div class="text">
+                                <h3>Bowser</h3>
+                                <p>Easy</p>
+                            </div>
+                        </div>
+
+                        <div class="character">
+                            <img src="/dist/images/neo.png" class="icon" alt="Neo">
+                            <div class="text">
+                                <h3>Neo</h3>
+                                <p>Medium</p>
+                            </div>
+                        </div>
+
+                        <div class="character">
+                            <img src="/dist/images/waldo.png" class="icon" alt="Waldo">
+                            <div class="text">
+                                <h3>Waldo</h3>
+                                <p>Hard</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <h2 id="count">0/3</h2>
+
+                <h2 id="timer">00:00:00</h2>                
             </header>
 
             <img src="/dist/images/background.jpg" id="backgroundImg" alt="Background Image">
             
-            <footer>FOOTER</footer>
+            <footer>
+                <div class="card">
+                    <a href="https://github.com/martinsmeder" target="_blank">
+                        <p>Coded by:</p>
+                        <p>Martin Smeder</p>
+                    </a>
+                </div>
+
+                <div class="card">
+                    <a href="https://chekavo.artstation.com/" target="_blank">
+                        <p>Background by:</p>
+                        <p>Egor Klyuchnyk</p>
+                    </a>
+                </div>
+            </footer>
         </div>
     </div>
 </body>
