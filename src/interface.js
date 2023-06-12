@@ -1,4 +1,56 @@
+// TO DO:
+// Finish 9.
+// Do 7.
+// Move logic to app-logic.js if needed
+// Continue with 10.
+
 console.log("interface.js says: this seem to be working");
+
+const Renderer = (() => {
+  const content = document.getElementById("content");
+
+  const createFeedbackMsg = (message) => {
+    const feedbackMsg = document.createElement("div");
+    feedbackMsg.className = "feedback-msg";
+    feedbackMsg.textContent = message;
+
+    content.appendChild(feedbackMsg);
+
+    setTimeout(() => {
+      feedbackMsg.style.opacity = "0";
+      setTimeout(() => {
+        feedbackMsg.remove();
+      }, 1000);
+    }, 5000);
+  };
+
+  const createPopup = (x, y) => {
+    const popup = document.createElement("div");
+    popup.className = "popup";
+
+    popup.style.left = `${x + 60}px`;
+    popup.style.top = `${y - 70}px`;
+
+    const options = ["Bowser", "Neo", "Waldo"];
+    options.forEach((option) => {
+      const choice = document.createElement("a");
+      choice.textContent = option;
+      choice.href = "#";
+      choice.addEventListener("click", () => {
+        popup.remove();
+        createFeedbackMsg("Keep looking!");
+      });
+      popup.appendChild(choice);
+    });
+
+    content.appendChild(popup);
+  };
+
+  return {
+    createPopup,
+    createFeedbackMsg,
+  };
+})();
 
 const Controller = (() => {
   const content = document.getElementById("content");
@@ -35,8 +87,13 @@ const Controller = (() => {
       const x = event.clientX - rect.left;
       const y = event.clientY - rect.top;
       createCircle(x, y);
+      Renderer.createPopup(x, y);
     } else {
       removeCircle();
+      const popup = document.querySelector(".popup");
+      if (popup) {
+        popup.remove();
+      }
     }
 
     isAddingCircle = !isAddingCircle;
