@@ -1,5 +1,5 @@
 // TO DO:
-// Finish 7.
+// Fix bug that scrolls user up when feedback message is shown, should be displayed where it is
 // Create Utils module and move things there
 // Additional cleanup if necessary
 // Continue with 10.
@@ -8,6 +8,10 @@ console.log("interface.js says: this seem to be working");
 
 const Renderer = (() => {
   const content = document.getElementById("content");
+  const overlay = document.getElementById("overlay");
+
+  const circles = [];
+  const popups = [];
 
   const createDiv = (className, text) => {
     const div = document.createElement("div");
@@ -30,11 +34,47 @@ const Renderer = (() => {
     content.appendChild(feedbackMsg);
   };
 
-  const createLink = (text) => {
+  const createLink = (text, clickHandler) => {
     const link = document.createElement("a");
     link.textContent = text;
     link.href = "#";
+    link.addEventListener("click", clickHandler);
     return link;
+  };
+
+  const showOverlay = () => {
+    overlay.style.display = "flex";
+  };
+
+  const hideOverlay = () => {
+    overlay.style.display = "none";
+  };
+
+  const removeElement = (element) => {
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
+  };
+
+  const removeCircle = () => {
+    if (circles.length > 0) {
+      const circleToRemove = circles.pop();
+      removeElement(circleToRemove);
+    }
+  };
+
+  const createCircle = (x, y) => {
+    const circle = createDiv("circle");
+    setPosition(circle, x - 50, y - 50);
+    content.appendChild(circle);
+    circles.push(circle);
+  };
+
+  const removePopup = () => {
+    if (popups.length > 0) {
+      const popupToRemove = popups.pop();
+      removeElement(popupToRemove);
+    }
   };
 
   const createPopup = (x, y) => {
@@ -43,34 +83,32 @@ const Renderer = (() => {
 
     const options = ["Bowser", "Neo", "Waldo"];
     options.forEach((option) => {
-      const choice = createLink(option);
-      choice.addEventListener("click", () => {
-        popup.remove();
+      const choice = Renderer.createLink(option, () => {
+        removePopup();
+        console.log(`Clicked on: ${option}`);
         createFeedbackMsg("Keep looking!");
       });
       popup.appendChild(choice);
     });
 
     content.appendChild(popup);
-  };
-
-  const showOverlay = () => {
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "flex";
-  };
-
-  const hideOverlay = () => {
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "none";
+    popups.push(popup);
   };
 
   return {
-    setPosition,
+    circles,
+    popups,
     createDiv,
-    createPopup,
+    setPosition,
     createFeedbackMsg,
+    createLink,
     showOverlay,
     hideOverlay,
+    removeElement,
+    removeCircle,
+    createCircle,
+    removePopup,
+    createPopup,
   };
 })();
 
@@ -80,24 +118,11 @@ const Controller = (() => {
   const dropdownMenu = document.getElementById("dropdownMenu");
   const backgroundImg = document.getElementById("backgroundImg");
   const startButton = document.getElementById("startButton");
+  const timerElement = document.getElementById("timer");
 
   let isGameStarted = false;
-  let isAddingCircle = true;
-  const circles = [];
-
-  const createCircle = (x, y) => {
-    const circle = Renderer.createDiv("circle");
-    Renderer.setPosition(circle, x - 50, y - 50);
-    content.appendChild(circle);
-    circles.push(circle);
-  };
-
-  const removeCircle = () => {
-    if (circles.length > 0) {
-      const circleToRemove = circles.pop();
-      content.removeChild(circleToRemove);
-    }
-  };
+  let isAddingCircle = false;
+  let isAddingPopup = false;
 
   const getCoordinates = (event) => {
     const rect = backgroundImg.getBoundingClientRect();
@@ -116,11 +141,10 @@ const Controller = (() => {
   };
 
   const startTimer = () => {
-    const timerElement = document.getElementById("timer");
     let seconds = 0;
 
     const updateTimer = () => {
-      seconds++;
+      seconds += 1;
       const formattedTime = formatTime(seconds);
       timerElement.textContent = formattedTime;
     };
@@ -133,27 +157,32 @@ const Controller = (() => {
       Renderer.hideOverlay();
       startTimer();
       isGameStarted = true;
+      isAddingCircle = true;
+      isAddingPopup = true;
     }
   };
 
   const handleContentClick = (event) => {
-    if (event.target.closest("header") || event.target.closest("footer")) {
+    if (
+      !isGameStarted ||
+      event.target.closest("header") ||
+      event.target.closest("footer") ||
+      event.target === startButton
+    ) {
       return;
     }
 
     if (isAddingCircle) {
       const { x, y } = getCoordinates(event);
-      createCircle(x, y);
+      Renderer.createCircle(x, y);
       Renderer.createPopup(x, y);
     } else {
-      removeCircle();
-      const popup = document.querySelector(".popup");
-      if (popup) {
-        popup.remove();
-      }
+      Renderer.removeCircle();
+      Renderer.removePopup();
     }
 
     isAddingCircle = !isAddingCircle;
+    isAddingPopup = !isAddingPopup;
   };
 
   const init = () => {

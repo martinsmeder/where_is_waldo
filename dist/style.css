@@ -162,10 +162,9 @@ footer .card:hover {
 
 .feedback {
     position: fixed;
-    top: 150px;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 200px;
     height: 50px;
     display: flex;
