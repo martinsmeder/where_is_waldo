@@ -5,6 +5,22 @@ export const InterfaceHelpers = (() => {
     const rect = backgroundImg.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
+    console.log(`X: ${x}, Y: ${y}`);
+
+    const referenceWidth = 1920; // Reference width of the coordinate system
+    const referenceHeight = 1080; // Reference height of the coordinate system
+
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    const widthScalingFactor = screenWidth / referenceWidth;
+    const heightScalingFactor = screenHeight / referenceHeight;
+
+    const scaledX = x / widthScalingFactor;
+    const scaledY = y / heightScalingFactor;
+
+    console.log(`Scaled X: ${scaledX}, Scaled Y: ${scaledY}`);
+
     return { x, y };
   };
 

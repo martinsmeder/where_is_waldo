@@ -116,7 +116,6 @@ const Controller = (() => {
   const content = document.getElementById("content");
   const dropdownButton = document.getElementById("dropdownButton");
   const dropdownMenu = document.getElementById("dropdownMenu");
-  // const backgroundImg = document.getElementById("backgroundImg");
   const startButton = document.getElementById("startButton");
   const timerElement = document.getElementById("timer");
 
@@ -160,6 +159,15 @@ const Controller = (() => {
       const { x, y } = InterfaceHelpers.getCoordinates(event);
       Renderer.createCircle(x, y);
       Renderer.createPopup(x, y);
+      // ???
+      // const areaCoordinates = {
+      //   topLeftX: 734,
+      //   topLeftY: 1580,
+      //   bottomRightX: 852,
+      //   bottomRightY: 1677,
+      // };
+
+      // InterfaceHelpers.checkIfClickedInsideArea(event, areaCoordinates);
     } else {
       Renderer.removeCircle();
       Renderer.removePopup();
