@@ -161,10 +161,10 @@ footer .card:hover {
 /* =================================== FEEDBACK MESSAGE ==================================== */
 
 .feedback {
-    position: fixed;
-    top: 50%;
+    position: absolute;
+    /* top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
     width: 200px;
     height: 50px;
     display: flex;
@@ -173,7 +173,6 @@ footer .card:hover {
     color: #FFF;
     font-size: 1.5rem;
     border-radius: 5px;
-    z-index: 1;
     animation: fadeOut 5s ease-in-out forwards;
 }
   
