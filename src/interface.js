@@ -1,8 +1,8 @@
 // TO DO:
-// Fix bug that scrolls user up when feedback message is shown, should be displayed where it is
-// Create Utils module and move things there
 // Additional cleanup if necessary
 // Continue with 10.
+
+import { InterfaceHelpers } from "./utils";
 
 console.log("interface.js says: this seem to be working");
 
@@ -28,10 +28,15 @@ const Renderer = (() => {
     positioned.style.top = `${y}px`;
   };
 
-  const createFeedbackMsg = (message) => {
+  const createFeedbackMsg = (message, x, y) => {
     const feedbackMsg = createDiv("feedback", message);
+    setPosition(feedbackMsg, x - 150, y - 100);
     feedbackMsg.style.background = "rgba(255, 0, 0, 0.7)";
     content.appendChild(feedbackMsg);
+
+    setTimeout(() => {
+      feedbackMsg.remove();
+    }, 5000);
   };
 
   const createLink = (text, clickHandler) => {
@@ -83,11 +88,8 @@ const Renderer = (() => {
 
     const options = ["Bowser", "Neo", "Waldo"];
     options.forEach((option) => {
-      const choice = Renderer.createLink(option, () => {
-        removePopup();
-        console.log(`Clicked on: ${option}`);
-        createFeedbackMsg("Keep looking!");
-      });
+      // eslint-disable-next-line no-use-before-define
+      const choice = Renderer.createLink(option, Controller.handleLinkClick);
       popup.appendChild(choice);
     });
 
@@ -96,8 +98,6 @@ const Renderer = (() => {
   };
 
   return {
-    circles,
-    popups,
     createDiv,
     setPosition,
     createFeedbackMsg,
@@ -116,7 +116,7 @@ const Controller = (() => {
   const content = document.getElementById("content");
   const dropdownButton = document.getElementById("dropdownButton");
   const dropdownMenu = document.getElementById("dropdownMenu");
-  const backgroundImg = document.getElementById("backgroundImg");
+  // const backgroundImg = document.getElementById("backgroundImg");
   const startButton = document.getElementById("startButton");
   const timerElement = document.getElementById("timer");
 
@@ -124,28 +124,12 @@ const Controller = (() => {
   let isAddingCircle = false;
   let isAddingPopup = false;
 
-  const getCoordinates = (event) => {
-    const rect = backgroundImg.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    return { x, y };
-  };
-
-  const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const formattedHours = String(hours).padStart(2, "0");
-    const formattedMinutes = String(minutes).padStart(2, "0");
-    const formattedSeconds = String(seconds % 60).padStart(2, "0");
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-  };
-
   const startTimer = () => {
     let seconds = 0;
 
     const updateTimer = () => {
       seconds += 1;
-      const formattedTime = formatTime(seconds);
+      const formattedTime = InterfaceHelpers.formatTime(seconds);
       timerElement.textContent = formattedTime;
     };
 
@@ -173,7 +157,7 @@ const Controller = (() => {
     }
 
     if (isAddingCircle) {
-      const { x, y } = getCoordinates(event);
+      const { x, y } = InterfaceHelpers.getCoordinates(event);
       Renderer.createCircle(x, y);
       Renderer.createPopup(x, y);
     } else {
@@ -185,8 +169,24 @@ const Controller = (() => {
     isAddingPopup = !isAddingPopup;
   };
 
+  const handleLinkClick = (event) => {
+    // Prevent the default behavior of the link, so that the user doesn't
+    // get thrown up to the top of the page for each link click
+    event.preventDefault();
+
+    console.log("handelLinkClick() triggered");
+    const { x, y } = InterfaceHelpers.getCoordinates(event);
+    Renderer.removePopup();
+    Renderer.createFeedbackMsg("Keep looking!", x, y);
+  };
+
   const init = () => {
     content.addEventListener("click", handleContentClick);
+
+    const links = document.querySelectorAll(".choice a");
+    links.forEach((link) => {
+      link.addEventListener("click", handleLinkClick);
+    });
 
     dropdownButton.addEventListener("click", () => {
       dropdownMenu.classList.toggle("show");
@@ -202,6 +202,7 @@ const Controller = (() => {
 
   return {
     init,
+    handleLinkClick,
   };
 })();
 
