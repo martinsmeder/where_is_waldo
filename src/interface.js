@@ -159,15 +159,6 @@ const Controller = (() => {
       const { x, y } = InterfaceHelpers.getCoordinates(event);
       Renderer.createCircle(x, y);
       Renderer.createPopup(x, y);
-      // ???
-      // const areaCoordinates = {
-      //   topLeftX: 734,
-      //   topLeftY: 1580,
-      //   bottomRightX: 852,
-      //   bottomRightY: 1677,
-      // };
-
-      // InterfaceHelpers.checkIfClickedInsideArea(event, areaCoordinates);
     } else {
       Renderer.removeCircle();
       Renderer.removePopup();
