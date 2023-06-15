@@ -1,70 +1,57 @@
+console.log("utils.js says: this seem to be working");
+
 export const InterfaceHelpers = (() => {
   const backgroundImg = document.getElementById("backgroundImg");
 
-  const getCoordinates = (event) => {
-    // Get the position and dimensions of the backgroundImg element
-    const rect = backgroundImg.getBoundingClientRect();
+  const characters = {
+    bowser: { left: 1430, top: 3130, right: 1730, bottom: 3424 },
+    neo: { left: 690, top: 4700, right: 900, bottom: 4900 },
+    waldo: { left: 1450, top: 6550, right: 1650, bottom: 6750 },
+  };
 
-    // Calculate the x and y coordinates of the click relative to the top-left corner of the
-    // backgroundImg element
+  const getCoordinates = (event) => {
+    const rect = backgroundImg.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    console.log(`X: ${x}, Y: ${y}`);
+    // console.log(`X: ${x}, Y: ${y}`);
 
-    const referenceWidth = 1920; // Reference width of the coordinate system
-
+    const referenceWidth = 1920;
     const screenWidth = window.innerWidth;
+    const scalingFactor = screenWidth / referenceWidth;
 
-    // Calculate the scaling factor for the width and height
-    const widthScalingFactor = screenWidth / referenceWidth;
-    const heightScalingFactor = screenWidth / referenceWidth;
+    const scaledX = x / scalingFactor;
+    const scaledY = y / scalingFactor;
 
-    // Scale the x and y coordinates based on the scaling factors
-    const scaledX = x / widthScalingFactor;
-    const scaledY = y / heightScalingFactor;
+    // console.log(`Scaled X: ${scaledX}, Scaled Y: ${scaledY}`);
 
-    // Define the boundaries of the character area
-    const areaLeft = scaledX - 100; // 150 pixels to the left of the clicked point
-    const areaTop = scaledY - 100; // 150 pixels above the clicked point
-    const areaRight = scaledX + 100; // 150 pixels to the right of the clicked point
-    const areaBottom = scaledY + 100; // 150 pixels below the clicked point
+    return { x, y, scaledX, scaledY };
+  };
 
-    // Bowser (works)
-    const bowserLeft = 1430;
-    const bowserTop = 3130;
-    const bowserRight = 1730;
-    const bowserBottom = 3424;
+  const isWithinArea = (coordinates, area) => {
+    const { scaledX, scaledY } = coordinates;
+    const { left, top, right, bottom } = area;
 
-    // Neo (works)
-    const neoLeft = 690;
-    const neoTop = 4700;
-    const neoRight = 900;
-    const neoBottom = 4900;
-
-    // Waldo (works)
-    const waldoLeft = 1450;
-    const waldoTop = 6550;
-    const waldoRight = 1650;
-    const waldoBottom = 6750;
-
-    console.log(`Scaled X: ${scaledX}, Scaled Y: ${scaledY}`);
-    console.log(
-      `Area: (${areaLeft}, ${areaTop}) to (${areaRight}, ${areaBottom})`
+    return (
+      scaledX >= left && scaledX <= right && scaledY >= top && scaledY <= bottom
     );
+  };
 
-    // Check if the click is within the specified area
-    if (
-      scaledX >= waldoLeft &&
-      scaledX <= waldoRight &&
-      scaledY >= waldoTop &&
-      scaledY <= waldoBottom
-    ) {
-      console.log("Found Waldo");
-    } else {
-      console.log("Not Found");
+  const captureCharacterArea = (event) => {
+    const coordinates = getCoordinates(event);
+    // console.log(`X: ${coordinates.x}, Y: ${coordinates.y}`);
+
+    let characterFound = false;
+
+    Object.keys(characters).forEach((character) => {
+      if (isWithinArea(coordinates, characters[character])) {
+        console.log(`Found ${character}`);
+        characterFound = true;
+      }
+    });
+
+    if (!characterFound) {
+      console.log("No character found");
     }
-
-    return { x, y };
   };
 
   const formatTime = (seconds) => {
@@ -77,7 +64,9 @@ export const InterfaceHelpers = (() => {
   };
 
   return {
+    characters,
     getCoordinates,
+    captureCharacterArea,
     formatTime,
   };
 })();

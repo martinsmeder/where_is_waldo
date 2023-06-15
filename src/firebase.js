@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
@@ -16,4 +16,4 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-export { app, db };
+export { app, db, collection };

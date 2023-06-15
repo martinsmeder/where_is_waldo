@@ -159,6 +159,7 @@ const Controller = (() => {
       const { x, y } = InterfaceHelpers.getCoordinates(event);
       Renderer.createCircle(x, y);
       Renderer.createPopup(x, y);
+      InterfaceHelpers.captureCharacterArea(event);
     } else {
       Renderer.removeCircle();
       Renderer.removePopup();

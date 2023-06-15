@@ -1,39 +1,66 @@
-// /* eslint-disable no-unused-vars */
-// import { app, db } from "./firebase";
+/* eslint-disable no-unused-vars */
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { app, db } from "./firebase";
+import { InterfaceHelpers } from "./utils";
 
-// console.log("app-logic.js says: this seem to be working");
+console.log("app-logic.js says: this seem to be working");
 
-// const FirestoreManager = (() => {
+export const FirestoreManager = (() => {
+  // eslint-disable-next-line prefer-destructuring
+  const characters = InterfaceHelpers.characters;
 
-//   const storeCharacterLocations = (locations) => {
-//     const collectionRef = db.collection("characterLocations");
+  const storeCharacterLocations = () => {
+    try {
+      Object.entries(characters).forEach(
+        ([character, { left, top, right, bottom }]) => {
+          setDoc(doc(db, "characterLocations", character), {
+            left,
+            top,
+            right,
+            bottom,
+          })
+            .then(() => {
+              console.log(`${character} location stored successfully.`);
+            })
+            .catch((error) => {
+              console.error(`Error storing ${character} location:`, error);
+            });
+        }
+      );
+    } catch (error) {
+      console.error("Error storing character locations:", error);
+    }
+  };
 
-//     locations.forEach((location) => {
-//       const { characterId, x, y } = location;
+  const getCharacterLocations = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "characterLocations"));
 
-//       collectionRef
-//         .doc(characterId)
-//         .set({ x, y })
-//         .then(() => {
-//           console.log(`Location stored for character ${characterId}`);
-//         })
-//         .catch((error) => {
-//           console.error(
-//             `Error storing location for character ${characterId}:`,
-//             error
-//           );
-//         });
-//     });
-//   };
+      // eslint-disable-next-line no-shadow
+      snapshot.forEach((doc) => {
+        const character = doc.id;
+        const { left, top, right, bottom } = doc.data();
+        console.log(`${character}: (${left}, ${top}, ${right}, ${bottom})`);
+      });
+    } catch (error) {
+      console.error("Error retrieving character locations:", error);
+    }
+  };
 
-//   const verifyClickedPosition = (x, y) => {
-//     // ...
-//   };
+  const verifyClickedPosition = (x, y) => {
+    // ...
+  };
 
-//   return {
-//     storeCharacterLocations,
-//     verifyClickedPosition,
-//   };
-// })();
+  return {
+    storeCharacterLocations,
+    getCharacterLocations,
+    verifyClickedPosition,
+  };
+})();
 
-// export default FirestoreManager;
+export const OtherLogic = (() => {
+  // ...
+})();
+
+FirestoreManager.storeCharacterLocations(); // Works ...
+// FirestoreManager.getCharacterLocations(); // Works...
