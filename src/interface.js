@@ -36,11 +36,13 @@ const Renderer = (() => {
     }, 5000);
   };
 
-  const createLink = (text, clickHandler) => {
+  const createLink = (text, character) => {
     const link = document.createElement("a");
     link.textContent = text;
     link.href = "#";
-    link.addEventListener("click", clickHandler);
+    link.dataset.character = character;
+    // eslint-disable-next-line no-use-before-define
+    link.addEventListener("click", Controller.handleLinkClick);
     return link;
   };
 
@@ -83,10 +85,13 @@ const Renderer = (() => {
     const popup = createDiv("choice");
     setPosition(popup, x + 60, y - 70);
 
-    const options = ["Bowser", "Neo", "Waldo"];
+    const options = [
+      { text: "Bowser", character: "bowser" },
+      { text: "Neo", character: "neo" },
+      { text: "Waldo", character: "waldo" },
+    ];
     options.forEach((option) => {
-      // eslint-disable-next-line no-use-before-define
-      const choice = Renderer.createLink(option, Controller.handleLinkClick);
+      const choice = Renderer.createLink(option.text, option.character);
       popup.appendChild(choice);
     });
 
@@ -119,6 +124,7 @@ const Controller = (() => {
   let isGameStarted = false;
   let isAddingCircle = false;
   let isAddingPopup = false;
+  let selectedCharacter = null;
 
   const startTimer = () => {
     let seconds = 0;
@@ -142,7 +148,7 @@ const Controller = (() => {
     }
   };
 
-  const handleContentClick = (event) => {
+  const handleContentClick = async (event) => {
     if (
       !isGameStarted ||
       event.target.closest("header") ||
@@ -156,8 +162,15 @@ const Controller = (() => {
       const { x, y, scaledX, scaledY } = InterfaceHelpers.getCoordinates(event);
       Renderer.createCircle(x, y);
       Renderer.createPopup(x, y);
-      // InterfaceHelpers.captureCharacterArea(event);
-      FirestoreManager.verifyClickedPosition(scaledX, scaledY);
+
+      try {
+        selectedCharacter = await FirestoreManager.verifyClickedPosition(
+          scaledX,
+          scaledY
+        );
+      } catch (error) {
+        console.error("Error verifying clicked position:", error);
+      }
     } else {
       Renderer.removeCircle();
       Renderer.removePopup();
@@ -168,14 +181,18 @@ const Controller = (() => {
   };
 
   const handleLinkClick = (event) => {
-    // Prevent the default behavior of the link, so that the user doesn't
-    // get thrown up to the top of the page for each link click
     event.preventDefault();
 
-    console.log("handelLinkClick() triggered");
     const { x, y } = InterfaceHelpers.getCoordinates(event);
     Renderer.removePopup();
-    Renderer.createFeedbackMsg("Keep looking!", x, y);
+
+    const clickedCharacter = event.target.dataset.character;
+
+    if (selectedCharacter === clickedCharacter) {
+      Renderer.createFeedbackMsg(`${selectedCharacter} found!`, x, y);
+    } else {
+      Renderer.createFeedbackMsg("Keep looking!", x, y);
+    }
   };
 
   const init = () => {

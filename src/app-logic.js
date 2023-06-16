@@ -50,8 +50,7 @@ export const FirestoreManager = (() => {
   const verifyClickedPosition = async (x, y) => {
     try {
       const snapshot = await getDocs(collection(db, "characterLocations"));
-
-      let characterFound = false;
+      let foundCharacter = null;
 
       // eslint-disable-next-line no-shadow
       snapshot.forEach((doc) => {
@@ -60,17 +59,17 @@ export const FirestoreManager = (() => {
 
         if (x >= left && x <= right && y >= top && y <= bottom) {
           console.log(`Clicked within ${character}'s area.`);
-          characterFound = true;
+          foundCharacter = character;
         }
       });
 
-      if (!characterFound) {
-        console.log("No character found.");
-      }
+      return foundCharacter;
     } catch (error) {
       console.error("Error verifying clicked position:", error);
+      return null;
     }
   };
+
   return {
     storeCharacterLocations,
     getCharacterLocations,
