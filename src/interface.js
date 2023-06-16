@@ -1,8 +1,5 @@
-// TO DO:
-// Additional cleanup if necessary
-// Continue with 10.
-
 import { InterfaceHelpers } from "./utils";
+import { FirestoreManager } from "./app-logic";
 
 console.log("interface.js says: this seem to be working");
 
@@ -156,10 +153,11 @@ const Controller = (() => {
     }
 
     if (isAddingCircle) {
-      const { x, y } = InterfaceHelpers.getCoordinates(event);
+      const { x, y, scaledX, scaledY } = InterfaceHelpers.getCoordinates(event);
       Renderer.createCircle(x, y);
       Renderer.createPopup(x, y);
-      InterfaceHelpers.captureCharacterArea(event);
+      // InterfaceHelpers.captureCharacterArea(event);
+      FirestoreManager.verifyClickedPosition(scaledX, scaledY);
     } else {
       Renderer.removeCircle();
       Renderer.removePopup();

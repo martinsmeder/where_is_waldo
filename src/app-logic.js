@@ -47,10 +47,30 @@ export const FirestoreManager = (() => {
     }
   };
 
-  const verifyClickedPosition = (x, y) => {
-    // ...
-  };
+  const verifyClickedPosition = async (x, y) => {
+    try {
+      const snapshot = await getDocs(collection(db, "characterLocations"));
 
+      let characterFound = false;
+
+      // eslint-disable-next-line no-shadow
+      snapshot.forEach((doc) => {
+        const character = doc.id;
+        const { left, top, right, bottom } = doc.data();
+
+        if (x >= left && x <= right && y >= top && y <= bottom) {
+          console.log(`Clicked within ${character}'s area.`);
+          characterFound = true;
+        }
+      });
+
+      if (!characterFound) {
+        console.log("No character found.");
+      }
+    } catch (error) {
+      console.error("Error verifying clicked position:", error);
+    }
+  };
   return {
     storeCharacterLocations,
     getCharacterLocations,
@@ -62,5 +82,5 @@ export const OtherLogic = (() => {
   // ...
 })();
 
-FirestoreManager.storeCharacterLocations(); // Works ...
+// FirestoreManager.storeCharacterLocations(); // Works ...
 // FirestoreManager.getCharacterLocations(); // Works...
