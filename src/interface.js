@@ -25,10 +25,12 @@ const Renderer = (() => {
     positioned.style.top = `${y}px`;
   };
 
-  const createFeedbackMsg = (message, x, y) => {
+  const createFeedbackMsg = (message, x, y, color = "red") => {
     const feedbackMsg = createDiv("feedback", message);
     setPosition(feedbackMsg, x - 150, y - 100);
-    feedbackMsg.style.background = "rgba(255, 0, 0, 0.7)";
+    feedbackMsg.style.background = `rgba(${
+      color === "green" ? "0, 255, 0" : "255, 0, 0"
+    }, 0.7)`;
     content.appendChild(feedbackMsg);
 
     setTimeout(() => {
@@ -99,6 +101,19 @@ const Renderer = (() => {
     popups.push(popup);
   };
 
+  const grayOutCharacterIcon = (characterId) => {
+    const characterElement = document.getElementById(characterId);
+    if (characterElement) {
+      characterElement.classList.add("grayed-out");
+    }
+  };
+
+  const updateCount = () => {
+    const countElement = document.getElementById("count");
+    const foundCount = document.querySelectorAll(".grayed-out").length;
+    countElement.textContent = `${foundCount}/3`;
+  };
+
   return {
     createDiv,
     setPosition,
@@ -111,6 +126,8 @@ const Renderer = (() => {
     createCircle,
     removePopup,
     createPopup,
+    grayOutCharacterIcon,
+    updateCount,
   };
 })();
 
@@ -189,7 +206,18 @@ const Controller = (() => {
     const clickedCharacter = event.target.dataset.character;
 
     if (selectedCharacter === clickedCharacter) {
-      Renderer.createFeedbackMsg(`${selectedCharacter} found!`, x, y);
+      const formattedCharacter =
+        selectedCharacter.charAt(0).toUpperCase() +
+        selectedCharacter.slice(1).toLowerCase();
+      Renderer.createFeedbackMsg(`Found ${formattedCharacter}!`, x, y, "green");
+
+      // eslint-disable-next-line no-param-reassign
+      event.target.style.textDecoration = "line-through";
+      event.target.removeEventListener("click", handleLinkClick);
+
+      Renderer.grayOutCharacterIcon(clickedCharacter);
+
+      Renderer.updateCount();
     } else {
       Renderer.createFeedbackMsg("Keep looking!", x, y);
     }
