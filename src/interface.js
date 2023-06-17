@@ -38,14 +38,14 @@ const Renderer = (() => {
     }, 5000);
   };
 
-  const createLink = (text, character) => {
-    const link = document.createElement("a");
-    link.textContent = text;
-    link.href = "#";
-    link.dataset.character = character;
+  const createButton = (text, character) => {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.type = "button";
+    button.dataset.character = character;
     // eslint-disable-next-line no-use-before-define
-    link.addEventListener("click", Controller.handleLinkClick);
-    return link;
+    button.addEventListener("click", Controller.handleButtonClick);
+    return button;
   };
 
   const showOverlay = () => {
@@ -83,7 +83,7 @@ const Renderer = (() => {
     }
   };
 
-  const createPopup = (x, y) => {
+  const createPopup = (x, y, foundCharacters) => {
     const popup = createDiv("choice");
     setPosition(popup, x + 60, y - 70);
 
@@ -92,8 +92,16 @@ const Renderer = (() => {
       { text: "Neo", character: "neo" },
       { text: "Waldo", character: "waldo" },
     ];
+
     options.forEach((option) => {
-      const choice = Renderer.createLink(option.text, option.character);
+      const choice = createButton(option.text, option.character);
+
+      if (foundCharacters.includes(option.character)) {
+        choice.classList.add("found");
+        // eslint-disable-next-line no-use-before-define
+        choice.removeEventListener("click", Controller.handleButtonClick);
+      }
+
       popup.appendChild(choice);
     });
 
@@ -118,7 +126,7 @@ const Renderer = (() => {
     createDiv,
     setPosition,
     createFeedbackMsg,
-    createLink,
+    createButton,
     showOverlay,
     hideOverlay,
     removeElement,
@@ -142,6 +150,7 @@ const Controller = (() => {
   let isAddingCircle = false;
   let isAddingPopup = false;
   let selectedCharacter = null;
+  const foundCharacters = [];
 
   const startTimer = () => {
     let seconds = 0;
@@ -178,7 +187,7 @@ const Controller = (() => {
     if (isAddingCircle) {
       const { x, y, scaledX, scaledY } = InterfaceHelpers.getCoordinates(event);
       Renderer.createCircle(x, y);
-      Renderer.createPopup(x, y);
+      Renderer.createPopup(x, y, foundCharacters);
 
       try {
         selectedCharacter = await FirestoreManager.verifyClickedPosition(
@@ -197,9 +206,7 @@ const Controller = (() => {
     isAddingPopup = !isAddingPopup;
   };
 
-  const handleLinkClick = (event) => {
-    event.preventDefault();
-
+  const handleButtonClick = (event) => {
     const { x, y } = InterfaceHelpers.getCoordinates(event);
     Renderer.removePopup();
 
@@ -211,24 +218,25 @@ const Controller = (() => {
         selectedCharacter.slice(1).toLowerCase();
       Renderer.createFeedbackMsg(`Found ${formattedCharacter}!`, x, y, "green");
 
-      // eslint-disable-next-line no-param-reassign
-      event.target.style.textDecoration = "line-through";
-      event.target.removeEventListener("click", handleLinkClick);
-
       Renderer.grayOutCharacterIcon(clickedCharacter);
-
       Renderer.updateCount();
+
+      foundCharacters.push(clickedCharacter);
+      Renderer.removePopup();
+      Renderer.createPopup(x, y, foundCharacters);
     } else {
       Renderer.createFeedbackMsg("Keep looking!", x, y);
     }
+
+    return false;
   };
 
   const init = () => {
     content.addEventListener("click", handleContentClick);
 
-    const links = document.querySelectorAll(".choice a");
-    links.forEach((link) => {
-      link.addEventListener("click", handleLinkClick);
+    const buttons = document.querySelectorAll(".choice button");
+    buttons.forEach((button) => {
+      button.addEventListener("click", handleButtonClick);
     });
 
     dropdownButton.addEventListener("click", () => {
@@ -245,7 +253,7 @@ const Controller = (() => {
 
   return {
     init,
-    handleLinkClick,
+    handleButtonClick,
   };
 })();
 

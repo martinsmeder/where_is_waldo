@@ -151,24 +151,37 @@ footer .card:hover {
     padding: 10px;
 }
 
-.choice a {
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.7);
-    font-size: 1.5rem;
+.choice button {
+    width: 80px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #FFF;
+    font-size: 1.2rem;
     font-weight: bold;
+    padding: 5px;
+    border: 1px solid #FFF;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 .3rem #000;
 }
 
-.choice a:hover {
+.choice button.found {
+    opacity: .3;
+    cursor: default;
+    box-shadow: none;
+}
+
+.choice button:hover {
     transform: scale(1.1);
+}
+
+.choice button.found:hover {
+    transform: none; 
 }
 
 /* =================================== FEEDBACK MESSAGE ==================================== */
 
 .feedback {
     position: absolute;
-    /* top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
     width: 200px;
     height: 50px;
     display: flex;
