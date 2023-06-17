@@ -205,9 +205,9 @@ footer .card:hover {
     }
 }
 
-/* =================================== INITIAL MODAL ======================================= */
+/* ======================================== MODALS ========================================= */
 
-#overlay {
+.overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -223,26 +223,18 @@ footer .card:hover {
 .modal {
     background-color: rgba(0, 0, 0, 0.7); 
     color: #FFF;
-    padding: 30px;
+    padding: 25px;
     padding-bottom: 20px;
     border: 2px solid #FFF;
     border-radius: 10px;
     box-shadow: 0 0 .5rem #FFF;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px
+    gap: 25px;
 }
   
-.modal h3 {
-    margin-top: 0;
-}
-  
-.modal button {
-    margin-top: 10px;
-    padding: 3px;
-    cursor: pointer;
-}
 
 /* ====================================== MISC ======================================= */
 

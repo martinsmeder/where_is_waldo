@@ -53,10 +53,21 @@
                 <h2 id="timer">00:00:00</h2>                
             </header>
 
-            <div id="overlay">
-                <div class="modal">
+            <div class="overlay">
+                <div class="modal initial">
                   <h3>Ready to play where's Waldo?</h3>
                   <button id="startButton">Start Game</button>
+                </div>
+            </div>
+              
+            <div class="overlay">
+                <div class="modal endgame">
+                  <h3>You found them all!</h3>
+                  <p>Enter a username to view the leaderboard.</p>
+                  <div id="username" class="username">
+                    <input type="text" placeholder="Username:" />
+                    <button id="submitUsername">Submit</button>
+                  </div>
                 </div>
             </div>
 
