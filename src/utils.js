@@ -7,6 +7,8 @@ export const InterfaceHelpers = (() => {
   const timerElement = document.getElementById("timer");
   const overlay = document.getElementById("overlay");
 
+  let timerInterval;
+
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -25,7 +27,11 @@ export const InterfaceHelpers = (() => {
       timerElement.textContent = formattedTime;
     };
 
-    setInterval(updateTimer, 1000);
+    timerInterval = setInterval(updateTimer, 1000);
+  };
+
+  const stopTimer = () => {
+    clearInterval(timerInterval);
   };
 
   const createDiv = (className, text) => {
@@ -81,6 +87,7 @@ export const InterfaceHelpers = (() => {
 
   return {
     startTimer,
+    stopTimer,
     createDiv,
     createButton,
     removeElement,

@@ -159,6 +159,10 @@ export const Controller = (() => {
       foundCharacters.push(clickedCharacter);
       Renderer.removePopup();
       Renderer.createPopup(x, y, foundCharacters);
+
+      if (foundCharacters.length === 3) {
+        InterfaceHelpers.stopTimer();
+      }
     } else {
       Renderer.createFeedbackMsg("Keep looking!", x, y);
     }
