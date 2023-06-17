@@ -235,6 +235,29 @@ footer .card:hover {
     gap: 25px;
 }
   
+/* ====================================== TABLE ======================================= */
+
+#tableContainer table {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#tableBody {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+thead {
+    margin-bot;
+}
+
+tr {
+    display: flex;
+    justify-content: space-between;
+}
 
 /* ====================================== MISC ======================================= */
 

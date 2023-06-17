@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 // eslint-disable-next-line import/no-cycle
-import { Controller } from "./interface";
+import { Controller, Renderer } from "./interface";
 import { FirestoreManager } from "./app-logic";
 
 console.log("utils.js says: this seem to be working");
@@ -84,20 +84,45 @@ export const InterfaceHelpers = (() => {
     }
   };
 
+  const clearCharacterIcons = () => {
+    const characterIds = ["bowser", "neo", "waldo"];
+    characterIds.forEach((characterId) => {
+      const characterElement = document.getElementById(characterId);
+      if (characterElement) {
+        characterElement.classList.remove("grayed-out");
+      }
+    });
+  };
+
   const updateCount = () => {
     const countElement = document.getElementById("count");
     const foundCount = document.querySelectorAll(".grayed-out").length;
     countElement.textContent = `${foundCount}/3`;
   };
 
+  const resetCount = () => {
+    const countElement = document.getElementById("count");
+    countElement.textContent = "0/3";
+  };
+
+  const resetTimer = () => {
+    stopTimer();
+    timerElement.textContent = "00:00:00";
+  };
+
   const getUsername = () => {
     const usernameInput = document.querySelector(".endgame input");
     const submitButton = document.getElementById("submitUsername");
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
       const username = usernameInput.value.trim();
       if (username) {
         FirestoreManager.storeUserTime(username, timerElement.textContent);
+        const userTimes = await FirestoreManager.getAllUserTimes();
+        Renderer.createTable(userTimes);
+        InterfaceHelpers.showModal(
+          document.querySelector(".modal.leaderboard")
+        );
       }
     };
 
@@ -114,8 +139,11 @@ export const InterfaceHelpers = (() => {
     showModal,
     hideModal,
     grayOutCharacterIcon,
+    clearCharacterIcons,
     updateCount,
     getUsername,
+    resetCount,
+    resetTimer,
   };
 })();
 

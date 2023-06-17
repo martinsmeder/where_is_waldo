@@ -8,7 +8,7 @@ import { FirestoreManager, LocationManager } from "./app-logic";
 
 console.log("interface.js says: this seem to be working");
 
-const Renderer = (() => {
+export const Renderer = (() => {
   const content = document.getElementById("content");
 
   const circles = [];
@@ -77,12 +77,31 @@ const Renderer = (() => {
     popups.push(popup);
   };
 
+  const createTable = (userTimes) => {
+    const scoreboardTableBody = document.getElementById("tableBody");
+    scoreboardTableBody.textContent = "";
+
+    // THIS LINE CAUSES ERROR
+    userTimes.forEach((userTime) => {
+      const row = document.createElement("tr");
+      const usernameCell = document.createElement("td");
+      usernameCell.textContent = userTime.username;
+      const timeCell = document.createElement("td");
+      timeCell.textContent = userTime.time;
+
+      row.appendChild(usernameCell);
+      row.appendChild(timeCell);
+      scoreboardTableBody.appendChild(row);
+    });
+  };
+
   return {
     createFeedbackMsg,
     removeCircle,
     createCircle,
     removePopup,
     createPopup,
+    createTable,
   };
 })();
 
@@ -92,8 +111,10 @@ export const Controller = (() => {
   const dropdownButton = document.getElementById("dropdownButton");
   const dropdownMenu = document.getElementById("dropdownMenu");
   const startButton = document.getElementById("startButton");
+  const playAgainButton = document.getElementById("playAgainButton");
   const initialModal = document.querySelector(".modal.initial");
   const endgameModal = document.querySelector(".modal.endgame");
+  const leaderboardModal = document.querySelector(".modal.leaderboard");
 
   let isGameStarted = false;
   let isAddingCircle = false;
@@ -109,6 +130,21 @@ export const Controller = (() => {
       isAddingCircle = true;
       isAddingPopup = true;
     }
+  };
+
+  const resetGame = () => {
+    isGameStarted = false;
+    isAddingCircle = false;
+    isAddingPopup = false;
+    selectedCharacter = null;
+    foundCharacters.length = 0;
+
+    InterfaceHelpers.resetCount();
+    InterfaceHelpers.resetTimer();
+    InterfaceHelpers.clearCharacterIcons();
+    InterfaceHelpers.hideModal(leaderboardModal);
+    InterfaceHelpers.hideModal(endgameModal);
+    InterfaceHelpers.showModal(initialModal);
   };
 
   const handleContentClick = async (event) => {
@@ -174,6 +210,10 @@ export const Controller = (() => {
     return false;
   };
 
+  const handlePlayAgainButtonClick = () => {
+    resetGame();
+  };
+
   const init = () => {
     content.addEventListener("click", handleContentClick);
 
@@ -196,6 +236,9 @@ export const Controller = (() => {
       InterfaceHelpers.hideModal(endgameModal);
     });
 
+    playAgainButton.addEventListener("click", handlePlayAgainButtonClick);
+
+    InterfaceHelpers.hideModal(leaderboardModal);
     InterfaceHelpers.hideModal(endgameModal);
     InterfaceHelpers.showModal(initialModal);
   };

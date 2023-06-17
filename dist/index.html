@@ -65,9 +65,27 @@
                   <h3>You found them all!</h3>
                   <p>Enter a username to view the leaderboard.</p>
                   <div id="username" class="username">
-                    <input type="text" placeholder="Username:" />
+                    <input type="text" placeholder="Username:" required/>
                     <button id="submitUsername">Submit</button>
                   </div>
+                </div>
+            </div>
+
+            <div class="overlay">
+                <div class="modal leaderboard">
+                    <h3>Leaderboard:</h3>
+                    <div id="tableContainer">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
+                    </div>
+                    <button id="playAgainButton">Play again</button>
                 </div>
             </div>
 

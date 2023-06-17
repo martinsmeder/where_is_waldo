@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { app, db } from "./firebase";
@@ -96,7 +97,6 @@ export const FirestoreManager = (() => {
     try {
       const snapshot = await getDocs(collection(db, "characterLocations"));
 
-      // eslint-disable-next-line no-shadow
       snapshot.forEach((doc) => {
         const character = doc.id;
         const { left, top, right, bottom } = doc.data();
@@ -112,7 +112,6 @@ export const FirestoreManager = (() => {
       const snapshot = await getDocs(collection(db, "characterLocations"));
       let foundCharacter = null;
 
-      // eslint-disable-next-line no-shadow
       snapshot.forEach((doc) => {
         const character = doc.id;
         const { left, top, right, bottom } = doc.data();
@@ -139,13 +138,35 @@ export const FirestoreManager = (() => {
     }
   };
 
+  // eslint-disable-next-line consistent-return
+  const getAllUserTimes = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "userTimes"));
+
+      const userTimes = [];
+      snapshot.forEach((doc) => {
+        const username = doc.id;
+        const { time } = doc.data();
+        userTimes.push({ username, time });
+      });
+
+      userTimes.sort((a, b) => a.time.localeCompare(b.time));
+
+      userTimes.forEach((userTime) => {
+        console.log(`Username: ${userTime.username}, Time: ${userTime.time}`);
+      });
+
+      return userTimes;
+    } catch (error) {
+      console.error("Error retrieving user times:", error);
+    }
+  };
+
   return {
     storeCharacterLocations,
     getCharacterLocations,
     verifyClickedPosition,
     storeUserTime,
+    getAllUserTimes,
   };
 })();
-
-// FirestoreManager.storeCharacterLocations(); // Works ...
-// FirestoreManager.getCharacterLocations(); // Works...
