@@ -1,13 +1,73 @@
 /* eslint-disable no-unused-vars */
 import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { app, db } from "./firebase";
-import { InterfaceHelpers } from "./utils";
 
 console.log("app-logic.js says: this seem to be working");
 
+export const LocationManager = (() => {
+  const backgroundImg = document.getElementById("backgroundImg");
+
+  const characters = {
+    bowser: { left: 1430, top: 3130, right: 1730, bottom: 3424 },
+    neo: { left: 690, top: 4700, right: 900, bottom: 4900 },
+    waldo: { left: 1450, top: 6550, right: 1650, bottom: 6750 },
+  };
+
+  const getCoordinates = (event) => {
+    const rect = backgroundImg.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    // console.log(`X: ${x}, Y: ${y}`);
+
+    const referenceWidth = 1920;
+    const screenWidth = window.innerWidth;
+    const scalingFactor = screenWidth / referenceWidth;
+
+    const scaledX = x / scalingFactor;
+    const scaledY = y / scalingFactor;
+
+    // console.log(`Scaled X: ${scaledX}, Scaled Y: ${scaledY}`);
+
+    return { x, y, scaledX, scaledY };
+  };
+
+  const isWithinArea = (coordinates, area) => {
+    const { scaledX, scaledY } = coordinates;
+    const { left, top, right, bottom } = area;
+
+    return (
+      scaledX >= left && scaledX <= right && scaledY >= top && scaledY <= bottom
+    );
+  };
+
+  const captureCharacterArea = (event) => {
+    const coordinates = getCoordinates(event);
+    // console.log(`X: ${coordinates.x}, Y: ${coordinates.y}`);
+
+    let characterFound = false;
+
+    Object.keys(characters).forEach((character) => {
+      if (isWithinArea(coordinates, characters[character])) {
+        console.log(`Found ${character}`);
+        characterFound = true;
+      }
+    });
+
+    if (!characterFound) {
+      console.log("No character found");
+    }
+  };
+
+  return {
+    characters,
+    getCoordinates,
+    captureCharacterArea,
+  };
+})();
+
 export const FirestoreManager = (() => {
   // eslint-disable-next-line prefer-destructuring
-  const characters = InterfaceHelpers.characters;
+  const characters = LocationManager.characters;
 
   const storeCharacterLocations = () => {
     try {
@@ -75,10 +135,6 @@ export const FirestoreManager = (() => {
     getCharacterLocations,
     verifyClickedPosition,
   };
-})();
-
-export const OtherLogic = (() => {
-  // ...
 })();
 
 // FirestoreManager.storeCharacterLocations(); // Works ...

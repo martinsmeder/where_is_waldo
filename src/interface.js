@@ -1,33 +1,22 @@
+// 1. Improve / refactor code to make the last parts easier
+// 2. Step 14
+// 3. Step 15
+
+// eslint-disable-next-line import/no-cycle
 import { InterfaceHelpers } from "./utils";
-import { FirestoreManager } from "./app-logic";
+import { FirestoreManager, LocationManager } from "./app-logic";
 
 console.log("interface.js says: this seem to be working");
 
 const Renderer = (() => {
   const content = document.getElementById("content");
-  const overlay = document.getElementById("overlay");
 
   const circles = [];
   const popups = [];
 
-  const createDiv = (className, text) => {
-    const div = document.createElement("div");
-    div.className = className;
-    if (text) {
-      div.textContent = text;
-    }
-    return div;
-  };
-
-  const setPosition = (element, x, y) => {
-    const positioned = element;
-    positioned.style.left = `${x}px`;
-    positioned.style.top = `${y}px`;
-  };
-
   const createFeedbackMsg = (message, x, y, color = "red") => {
-    const feedbackMsg = createDiv("feedback", message);
-    setPosition(feedbackMsg, x - 150, y - 100);
+    const feedbackMsg = InterfaceHelpers.createDiv("feedback", message);
+    InterfaceHelpers.setPosition(feedbackMsg, x - 150, y - 100);
     feedbackMsg.style.background = `rgba(${
       color === "green" ? "0, 255, 0" : "255, 0, 0"
     }, 0.7)`;
@@ -38,40 +27,16 @@ const Renderer = (() => {
     }, 5000);
   };
 
-  const createButton = (text, character) => {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.type = "button";
-    button.dataset.character = character;
-    // eslint-disable-next-line no-use-before-define
-    button.addEventListener("click", Controller.handleButtonClick);
-    return button;
-  };
-
-  const showOverlay = () => {
-    overlay.style.display = "flex";
-  };
-
-  const hideOverlay = () => {
-    overlay.style.display = "none";
-  };
-
-  const removeElement = (element) => {
-    if (element.parentNode) {
-      element.parentNode.removeChild(element);
-    }
-  };
-
   const removeCircle = () => {
     if (circles.length > 0) {
       const circleToRemove = circles.pop();
-      removeElement(circleToRemove);
+      InterfaceHelpers.removeElement(circleToRemove);
     }
   };
 
   const createCircle = (x, y) => {
-    const circle = createDiv("circle");
-    setPosition(circle, x - 50, y - 50);
+    const circle = InterfaceHelpers.createDiv("circle");
+    InterfaceHelpers.setPosition(circle, x - 50, y - 50);
     content.appendChild(circle);
     circles.push(circle);
   };
@@ -79,13 +44,13 @@ const Renderer = (() => {
   const removePopup = () => {
     if (popups.length > 0) {
       const popupToRemove = popups.pop();
-      removeElement(popupToRemove);
+      InterfaceHelpers.removeElement(popupToRemove);
     }
   };
 
   const createPopup = (x, y, foundCharacters) => {
-    const popup = createDiv("choice");
-    setPosition(popup, x + 60, y - 70);
+    const popup = InterfaceHelpers.createDiv("choice");
+    InterfaceHelpers.setPosition(popup, x + 60, y - 70);
 
     const options = [
       { text: "Bowser", character: "bowser" },
@@ -94,7 +59,10 @@ const Renderer = (() => {
     ];
 
     options.forEach((option) => {
-      const choice = createButton(option.text, option.character);
+      const choice = InterfaceHelpers.createButton(
+        option.text,
+        option.character
+      );
 
       if (foundCharacters.includes(option.character)) {
         choice.classList.add("found");
@@ -109,42 +77,21 @@ const Renderer = (() => {
     popups.push(popup);
   };
 
-  const grayOutCharacterIcon = (characterId) => {
-    const characterElement = document.getElementById(characterId);
-    if (characterElement) {
-      characterElement.classList.add("grayed-out");
-    }
-  };
-
-  const updateCount = () => {
-    const countElement = document.getElementById("count");
-    const foundCount = document.querySelectorAll(".grayed-out").length;
-    countElement.textContent = `${foundCount}/3`;
-  };
-
   return {
-    createDiv,
-    setPosition,
     createFeedbackMsg,
-    createButton,
-    showOverlay,
-    hideOverlay,
-    removeElement,
     removeCircle,
     createCircle,
     removePopup,
     createPopup,
-    grayOutCharacterIcon,
-    updateCount,
   };
 })();
 
-const Controller = (() => {
+// eslint-disable-next-line import/prefer-default-export
+export const Controller = (() => {
   const content = document.getElementById("content");
   const dropdownButton = document.getElementById("dropdownButton");
   const dropdownMenu = document.getElementById("dropdownMenu");
   const startButton = document.getElementById("startButton");
-  const timerElement = document.getElementById("timer");
 
   let isGameStarted = false;
   let isAddingCircle = false;
@@ -152,22 +99,10 @@ const Controller = (() => {
   let selectedCharacter = null;
   const foundCharacters = [];
 
-  const startTimer = () => {
-    let seconds = 0;
-
-    const updateTimer = () => {
-      seconds += 1;
-      const formattedTime = InterfaceHelpers.formatTime(seconds);
-      timerElement.textContent = formattedTime;
-    };
-
-    setInterval(updateTimer, 1000);
-  };
-
   const startGame = () => {
     if (!isGameStarted) {
-      Renderer.hideOverlay();
-      startTimer();
+      InterfaceHelpers.hideOverlay();
+      InterfaceHelpers.startTimer();
       isGameStarted = true;
       isAddingCircle = true;
       isAddingPopup = true;
@@ -185,7 +120,7 @@ const Controller = (() => {
     }
 
     if (isAddingCircle) {
-      const { x, y, scaledX, scaledY } = InterfaceHelpers.getCoordinates(event);
+      const { x, y, scaledX, scaledY } = LocationManager.getCoordinates(event);
       Renderer.createCircle(x, y);
       Renderer.createPopup(x, y, foundCharacters);
 
@@ -207,7 +142,7 @@ const Controller = (() => {
   };
 
   const handleButtonClick = (event) => {
-    const { x, y } = InterfaceHelpers.getCoordinates(event);
+    const { x, y } = LocationManager.getCoordinates(event);
     Renderer.removePopup();
 
     const clickedCharacter = event.target.dataset.character;
@@ -218,8 +153,8 @@ const Controller = (() => {
         selectedCharacter.slice(1).toLowerCase();
       Renderer.createFeedbackMsg(`Found ${formattedCharacter}!`, x, y, "green");
 
-      Renderer.grayOutCharacterIcon(clickedCharacter);
-      Renderer.updateCount();
+      InterfaceHelpers.grayOutCharacterIcon(clickedCharacter);
+      InterfaceHelpers.updateCount();
 
       foundCharacters.push(clickedCharacter);
       Renderer.removePopup();
@@ -248,7 +183,7 @@ const Controller = (() => {
 
     startButton.addEventListener("click", startGame);
 
-    Renderer.showOverlay();
+    InterfaceHelpers.showOverlay();
   };
 
   return {

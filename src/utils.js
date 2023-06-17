@@ -1,58 +1,11 @@
+// eslint-disable-next-line import/no-cycle
+import { Controller } from "./interface";
+
 console.log("utils.js says: this seem to be working");
 
 export const InterfaceHelpers = (() => {
-  const backgroundImg = document.getElementById("backgroundImg");
-
-  const characters = {
-    bowser: { left: 1430, top: 3130, right: 1730, bottom: 3424 },
-    neo: { left: 690, top: 4700, right: 900, bottom: 4900 },
-    waldo: { left: 1450, top: 6550, right: 1650, bottom: 6750 },
-  };
-
-  const getCoordinates = (event) => {
-    const rect = backgroundImg.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    // console.log(`X: ${x}, Y: ${y}`);
-
-    const referenceWidth = 1920;
-    const screenWidth = window.innerWidth;
-    const scalingFactor = screenWidth / referenceWidth;
-
-    const scaledX = x / scalingFactor;
-    const scaledY = y / scalingFactor;
-
-    // console.log(`Scaled X: ${scaledX}, Scaled Y: ${scaledY}`);
-
-    return { x, y, scaledX, scaledY };
-  };
-
-  const isWithinArea = (coordinates, area) => {
-    const { scaledX, scaledY } = coordinates;
-    const { left, top, right, bottom } = area;
-
-    return (
-      scaledX >= left && scaledX <= right && scaledY >= top && scaledY <= bottom
-    );
-  };
-
-  const captureCharacterArea = (event) => {
-    const coordinates = getCoordinates(event);
-    // console.log(`X: ${coordinates.x}, Y: ${coordinates.y}`);
-
-    let characterFound = false;
-
-    Object.keys(characters).forEach((character) => {
-      if (isWithinArea(coordinates, characters[character])) {
-        console.log(`Found ${character}`);
-        characterFound = true;
-      }
-    });
-
-    if (!characterFound) {
-      console.log("No character found");
-    }
-  };
+  const timerElement = document.getElementById("timer");
+  const overlay = document.getElementById("overlay");
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -63,11 +16,79 @@ export const InterfaceHelpers = (() => {
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   };
 
+  const startTimer = () => {
+    let seconds = 0;
+
+    const updateTimer = () => {
+      seconds += 1;
+      const formattedTime = formatTime(seconds);
+      timerElement.textContent = formattedTime;
+    };
+
+    setInterval(updateTimer, 1000);
+  };
+
+  const createDiv = (className, text) => {
+    const div = document.createElement("div");
+    div.className = className;
+    if (text) {
+      div.textContent = text;
+    }
+    return div;
+  };
+
+  const createButton = (text, character) => {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.type = "button";
+    button.dataset.character = character;
+    button.addEventListener("click", Controller.handleButtonClick);
+    return button;
+  };
+
+  const removeElement = (element) => {
+    if (element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
+  };
+
+  const setPosition = (element, x, y) => {
+    const positioned = element;
+    positioned.style.left = `${x}px`;
+    positioned.style.top = `${y}px`;
+  };
+
+  const showOverlay = () => {
+    overlay.style.display = "flex";
+  };
+
+  const hideOverlay = () => {
+    overlay.style.display = "none";
+  };
+
+  const grayOutCharacterIcon = (characterId) => {
+    const characterElement = document.getElementById(characterId);
+    if (characterElement) {
+      characterElement.classList.add("grayed-out");
+    }
+  };
+
+  const updateCount = () => {
+    const countElement = document.getElementById("count");
+    const foundCount = document.querySelectorAll(".grayed-out").length;
+    countElement.textContent = `${foundCount}/3`;
+  };
+
   return {
-    characters,
-    getCoordinates,
-    captureCharacterArea,
-    formatTime,
+    startTimer,
+    createDiv,
+    createButton,
+    removeElement,
+    setPosition,
+    showOverlay,
+    hideOverlay,
+    grayOutCharacterIcon,
+    updateCount,
   };
 })();
 
