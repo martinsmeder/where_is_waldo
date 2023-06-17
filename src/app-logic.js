@@ -130,10 +130,20 @@ export const FirestoreManager = (() => {
     }
   };
 
+  const storeUserTime = async (username, time) => {
+    try {
+      await setDoc(doc(db, "userTimes", username), { time });
+      console.log(`User time stored successfully for ${username}`);
+    } catch (error) {
+      console.error(`Error storing user time for ${username}:`, error);
+    }
+  };
+
   return {
     storeCharacterLocations,
     getCharacterLocations,
     verifyClickedPosition,
+    storeUserTime,
   };
 })();
 

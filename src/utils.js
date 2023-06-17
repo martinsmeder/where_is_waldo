@@ -1,11 +1,12 @@
+/* eslint-disable no-param-reassign */
 // eslint-disable-next-line import/no-cycle
 import { Controller } from "./interface";
+import { FirestoreManager } from "./app-logic";
 
 console.log("utils.js says: this seem to be working");
 
 export const InterfaceHelpers = (() => {
   const timerElement = document.getElementById("timer");
-  const overlay = document.getElementById("overlay");
 
   let timerInterval;
 
@@ -64,12 +65,16 @@ export const InterfaceHelpers = (() => {
     positioned.style.top = `${y}px`;
   };
 
-  const showOverlay = () => {
+  const showModal = (modal) => {
+    const overlay = modal.closest(".overlay");
     overlay.style.display = "flex";
+    modal.style.display = "flex";
   };
 
-  const hideOverlay = () => {
+  const hideModal = (modal) => {
+    const overlay = modal.closest(".overlay");
     overlay.style.display = "none";
+    modal.style.display = "none";
   };
 
   const grayOutCharacterIcon = (characterId) => {
@@ -85,6 +90,20 @@ export const InterfaceHelpers = (() => {
     countElement.textContent = `${foundCount}/3`;
   };
 
+  const getUsername = () => {
+    const usernameInput = document.querySelector(".endgame input");
+    const submitButton = document.getElementById("submitUsername");
+
+    const handleSubmit = () => {
+      const username = usernameInput.value.trim();
+      if (username) {
+        FirestoreManager.storeUserTime(username, timerElement.textContent);
+      }
+    };
+
+    submitButton.addEventListener("click", handleSubmit);
+  };
+
   return {
     startTimer,
     stopTimer,
@@ -92,10 +111,11 @@ export const InterfaceHelpers = (() => {
     createButton,
     removeElement,
     setPosition,
-    showOverlay,
-    hideOverlay,
+    showModal,
+    hideModal,
     grayOutCharacterIcon,
     updateCount,
+    getUsername,
   };
 })();
 

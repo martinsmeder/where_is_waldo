@@ -92,6 +92,8 @@ export const Controller = (() => {
   const dropdownButton = document.getElementById("dropdownButton");
   const dropdownMenu = document.getElementById("dropdownMenu");
   const startButton = document.getElementById("startButton");
+  const initialModal = document.querySelector(".modal.initial");
+  const endgameModal = document.querySelector(".modal.endgame");
 
   let isGameStarted = false;
   let isAddingCircle = false;
@@ -101,7 +103,7 @@ export const Controller = (() => {
 
   const startGame = () => {
     if (!isGameStarted) {
-      InterfaceHelpers.hideOverlay();
+      InterfaceHelpers.hideModal(initialModal);
       InterfaceHelpers.startTimer();
       isGameStarted = true;
       isAddingCircle = true;
@@ -114,7 +116,7 @@ export const Controller = (() => {
       !isGameStarted ||
       event.target.closest("header") ||
       event.target.closest("footer") ||
-      event.target === startButton
+      event.target.closest(".overlay")
     ) {
       return;
     }
@@ -162,6 +164,8 @@ export const Controller = (() => {
 
       if (foundCharacters.length === 3) {
         InterfaceHelpers.stopTimer();
+        InterfaceHelpers.getUsername();
+        InterfaceHelpers.showModal(endgameModal);
       }
     } else {
       Renderer.createFeedbackMsg("Keep looking!", x, y);
@@ -187,7 +191,13 @@ export const Controller = (() => {
 
     startButton.addEventListener("click", startGame);
 
-    InterfaceHelpers.showOverlay();
+    const submitButton = document.getElementById("submitUsername");
+    submitButton.addEventListener("click", () => {
+      InterfaceHelpers.hideModal(endgameModal);
+    });
+
+    InterfaceHelpers.hideModal(endgameModal);
+    InterfaceHelpers.showModal(initialModal);
   };
 
   return {
