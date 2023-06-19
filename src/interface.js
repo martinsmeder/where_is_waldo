@@ -1,5 +1,6 @@
-// 3. Final styling: --> Submit button --> Play again button
-// 4. Maybe: Improve code if possible --> Add slideshow and another map
+// THINGS TO MAYBE DO:
+// 1. Improve code structure
+// 2. Add another map and image slider
 
 // eslint-disable-next-line import/no-cycle
 import { InterfaceHelpers } from "./utils";
