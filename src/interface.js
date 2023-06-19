@@ -1,6 +1,5 @@
-// 1. Improve / refactor code to make the last parts easier
-// 2. Step 14
-// 3. Step 15
+// 3. Final styling: Fonts --> Header (button + animation) -->
+// 4. Maybe: Improve code if possible --> Add slideshow and another map
 
 // eslint-disable-next-line import/no-cycle
 import { InterfaceHelpers } from "./utils";
@@ -200,7 +199,7 @@ export const Controller = (() => {
 
       if (foundCharacters.length === 3) {
         InterfaceHelpers.stopTimer();
-        InterfaceHelpers.getUsername();
+        InterfaceHelpers.getLeaderboard();
         InterfaceHelpers.showModal(endgameModal);
       }
     } else {
@@ -208,10 +207,6 @@ export const Controller = (() => {
     }
 
     return false;
-  };
-
-  const handlePlayAgainButtonClick = () => {
-    resetGame();
   };
 
   const init = () => {
@@ -236,7 +231,7 @@ export const Controller = (() => {
       InterfaceHelpers.hideModal(endgameModal);
     });
 
-    playAgainButton.addEventListener("click", handlePlayAgainButtonClick);
+    playAgainButton.addEventListener("click", resetGame);
 
     InterfaceHelpers.hideModal(leaderboardModal);
     InterfaceHelpers.hideModal(endgameModal);

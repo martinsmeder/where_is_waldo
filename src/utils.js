@@ -35,6 +35,57 @@ export const InterfaceHelpers = (() => {
     clearInterval(timerInterval);
   };
 
+  const resetTimer = () => {
+    stopTimer();
+    timerElement.textContent = "00:00:00";
+  };
+
+  const updateCount = () => {
+    const countElement = document.getElementById("count");
+    const foundCount = document.querySelectorAll(".grayed-out").length;
+    countElement.textContent = `${foundCount}/3`;
+  };
+
+  const resetCount = () => {
+    const countElement = document.getElementById("count");
+    countElement.textContent = "0/3";
+  };
+
+  const grayOutCharacterIcon = (characterId) => {
+    const characterElement = document.getElementById(characterId);
+    if (characterElement) {
+      characterElement.classList.add("grayed-out");
+    }
+  };
+
+  const clearCharacterIcons = () => {
+    const characterIds = ["bowser", "neo", "waldo"];
+    characterIds.forEach((characterId) => {
+      const characterElement = document.getElementById(characterId);
+      if (characterElement) {
+        characterElement.classList.remove("grayed-out");
+      }
+    });
+  };
+
+  const showModal = (modal) => {
+    const overlay = modal.closest(".overlay");
+    overlay.style.display = "flex";
+    modal.style.display = "flex";
+  };
+
+  const hideModal = (modal) => {
+    const overlay = modal.closest(".overlay");
+    overlay.style.display = "none";
+    modal.style.display = "none";
+  };
+
+  const setPosition = (element, x, y) => {
+    const positioned = element;
+    positioned.style.left = `${x}px`;
+    positioned.style.top = `${y}px`;
+  };
+
   const createDiv = (className, text) => {
     const div = document.createElement("div");
     div.className = className;
@@ -59,58 +110,7 @@ export const InterfaceHelpers = (() => {
     }
   };
 
-  const setPosition = (element, x, y) => {
-    const positioned = element;
-    positioned.style.left = `${x}px`;
-    positioned.style.top = `${y}px`;
-  };
-
-  const showModal = (modal) => {
-    const overlay = modal.closest(".overlay");
-    overlay.style.display = "flex";
-    modal.style.display = "flex";
-  };
-
-  const hideModal = (modal) => {
-    const overlay = modal.closest(".overlay");
-    overlay.style.display = "none";
-    modal.style.display = "none";
-  };
-
-  const grayOutCharacterIcon = (characterId) => {
-    const characterElement = document.getElementById(characterId);
-    if (characterElement) {
-      characterElement.classList.add("grayed-out");
-    }
-  };
-
-  const clearCharacterIcons = () => {
-    const characterIds = ["bowser", "neo", "waldo"];
-    characterIds.forEach((characterId) => {
-      const characterElement = document.getElementById(characterId);
-      if (characterElement) {
-        characterElement.classList.remove("grayed-out");
-      }
-    });
-  };
-
-  const updateCount = () => {
-    const countElement = document.getElementById("count");
-    const foundCount = document.querySelectorAll(".grayed-out").length;
-    countElement.textContent = `${foundCount}/3`;
-  };
-
-  const resetCount = () => {
-    const countElement = document.getElementById("count");
-    countElement.textContent = "0/3";
-  };
-
-  const resetTimer = () => {
-    stopTimer();
-    timerElement.textContent = "00:00:00";
-  };
-
-  const getUsername = () => {
+  const getLeaderboard = () => {
     const usernameInput = document.querySelector(".endgame input");
     const submitButton = document.getElementById("submitUsername");
 
@@ -132,18 +132,18 @@ export const InterfaceHelpers = (() => {
   return {
     startTimer,
     stopTimer,
+    resetTimer,
+    resetCount,
+    updateCount,
+    grayOutCharacterIcon,
+    clearCharacterIcons,
+    showModal,
+    hideModal,
+    setPosition,
     createDiv,
     createButton,
     removeElement,
-    setPosition,
-    showModal,
-    hideModal,
-    grayOutCharacterIcon,
-    clearCharacterIcons,
-    updateCount,
-    getUsername,
-    resetCount,
-    resetTimer,
+    getLeaderboard,
   };
 })();
 
