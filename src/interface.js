@@ -1,4 +1,4 @@
-// 3. Final styling: Fonts --> Header (button + animation) -->
+// 3. Final styling: --> Submit button --> Play again button
 // 4. Maybe: Improve code if possible --> Add slideshow and another map
 
 // eslint-disable-next-line import/no-cycle
@@ -49,7 +49,15 @@ export const Renderer = (() => {
 
   const createPopup = (x, y, foundCharacters) => {
     const popup = InterfaceHelpers.createDiv("choice");
-    InterfaceHelpers.setPosition(popup, x + 60, y - 70);
+
+    const maxX = window.innerWidth - 150;
+    const popupX = x + 60;
+
+    if (popupX > maxX) {
+      InterfaceHelpers.setPosition(popup, x - 160, y - 70);
+    } else {
+      InterfaceHelpers.setPosition(popup, x + 60, y - 70);
+    }
 
     const options = [
       { text: "Bowser", character: "bowser" },
