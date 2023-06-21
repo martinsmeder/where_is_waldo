@@ -125,11 +125,14 @@ export const Controller = (() => {
   const initialModal = document.querySelector(".modal.initial");
   const endgameModal = document.querySelector(".modal.endgame");
   const leaderboardModal = document.querySelector(".modal.leaderboard");
+  const leftArrow = document.querySelector(".arrow.left");
+  const rightArrow = document.querySelector(".arrow.right");
 
   let isGameStarted = false;
   let isAddingCircle = false;
   let isAddingPopup = false;
   let selectedCharacter = null;
+  let currentSlide = 0;
   const foundCharacters = [];
 
   const startGame = () => {
@@ -220,7 +223,52 @@ export const Controller = (() => {
     return false;
   };
 
+  const updateActiveDot = () => {
+    const dots = document.querySelectorAll(".dot");
+    dots.forEach((dot, index) => {
+      if (index === currentSlide) {
+        dot.classList.add("active");
+      } else {
+        dot.classList.remove("active");
+      }
+    });
+  };
+
+  const updateActiveSlide = (direction) => {
+    const slides = document.querySelectorAll(".slide");
+    const totalSlides = slides.length;
+
+    slides[currentSlide].classList.remove("active");
+
+    if (direction === "left") {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      slides[currentSlide].style.transform = "translateX(-100%)";
+      slides[currentSlide].style.opacity = "0";
+    } else if (direction === "right") {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      slides[currentSlide].style.transform = "translateX(100%)";
+      slides[currentSlide].style.opacity = "0";
+    }
+
+    slides[currentSlide].classList.add("active");
+
+    setTimeout(() => {
+      slides[currentSlide].style.transform = "translateX(0)";
+      slides[currentSlide].style.opacity = "1";
+    }, 0);
+  };
+
   const init = () => {
+    leftArrow.addEventListener("click", () => {
+      updateActiveSlide("left");
+      updateActiveDot();
+    });
+
+    rightArrow.addEventListener("click", () => {
+      updateActiveSlide("right");
+      updateActiveDot();
+    });
+
     content.addEventListener("click", handleContentClick);
 
     const buttons = document.querySelectorAll(".choice button");
@@ -247,6 +295,8 @@ export const Controller = (() => {
     InterfaceHelpers.hideModal(leaderboardModal);
     InterfaceHelpers.hideModal(endgameModal);
     InterfaceHelpers.showModal(initialModal);
+
+    updateActiveDot();
   };
 
   return {

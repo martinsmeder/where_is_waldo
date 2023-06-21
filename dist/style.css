@@ -1,17 +1,17 @@
 
 * {
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
-  
+
 #container {
     font-family: 'Ubuntu', sans-serif;
-    width: 100%; 
-    min-height: 100vh; 
-    position: relative; 
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
     overflow: hidden;
-    line-height: 0; 
+    line-height: 0;
 }
 
 #backgroundContainer {
@@ -20,7 +20,7 @@
     height: 100%;
     pointer-events: none;
 }
-  
+
 #backgroundImg {
     width: 100%;
     height: 100%;
@@ -36,14 +36,14 @@
 }
 
 /* ======================================== HEADER ========================================= */
-  
+
 header {
     position: fixed;
-    top: 0; 
-    width: 100%; 
+    top: 0;
+    width: 100%;
     height: 100px;
-    background-color: rgba(0, 0, 0, 0.7); 
-    padding: 20px; 
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -98,35 +98,35 @@ header #dropdownButton:hover {
 }
 
 header #dropdownMenu {
-    display: none; 
-    overflow: hidden; 
+    display: none;
+    overflow: hidden;
     align-items: center;
     justify-content: space-around;
-    position: absolute; 
-    top: 103%; 
+    position: absolute;
+    top: 103%;
     right: 0;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     padding: 20px;
     border-bottom: 1px solid #FFF;
 }
-  
+
 header #dropdownMenu.show {
-    display: flex; 
+    display: flex;
     box-shadow: 0 0 .9rem #FFF
 }
 
-#bowser p {
+#bowser p, #meg p  {
     color: rgb(0, 255, 0);
     text-shadow: 0 0 .3rem rgb(0, 0, 0);
 }
 
-#neo p {
+#neo p, #pikachu p {
     color: rgb(255, 166, 0);
     text-shadow: 0 0 .3rem rgb(0, 0, 0);
 }
 
-#waldo p {
+#waldo p, #mike p {
     color: rgb(255, 0, 0);
     text-shadow: 0 0 .3rem rgb(0, 0, 0);
 }
@@ -136,8 +136,8 @@ header #dropdownMenu.show {
 footer {
     position: absolute;
     bottom: 0;
-    width: 100%; 
-    padding: 30px; 
+    width: 100%;
+    padding: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -156,7 +156,7 @@ footer .card {
     border: 2px solid #FFF;
     border-radius: 20px;
     padding: 30px;
-    background-color: rgba(0, 0, 0, 0.7); 
+    background-color: rgba(0, 0, 0, 0.7);
     font-size: 1.5rem;
     box-shadow: 0 0 .9rem #FFF;
 }
@@ -180,9 +180,9 @@ footer .card:hover {
     justify-content: center;
     z-index: 9999;
 }
-  
+
 .modal {
-    background-color: rgba(0, 0, 0, 0.7); 
+    background-color: rgba(0, 0, 0, 0.7);
     color: #FFF;
     padding: 25px;
     padding-bottom: 20px;
@@ -215,43 +215,45 @@ footer .card:hover {
     transform: scale(1.1);
 }
 
-.modal.initial {
-    width: 80vw;
-    height: 80vh;
-}
-
 /* ========================================== SLIDER ===================================== */
 #sliderContainer {
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr;
-    grid-template-rows: 4fr 1fr;
+    grid-template-columns: 50px 1fr 50px;
+    grid-template-rows: 50px 1fr 50px;
     align-items: center;
     justify-items: center;
 }
 
-#sliderContainer .slider {
+#sliderContainer h1 {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
+    font-size: 2.5rem;
+    padding-bottom: 20px;
+    text-shadow: 0 0 .3rem #FFF;
+}
+
+#sliderContainer .slider {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+}
+
+#sliderContainer .arrow {
+    grid-row: 2 / 3;
+    font-size: 4rem;
+    cursor: pointer;
 }
 
 #sliderContainer .arrow.left {
     grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    font-size: 4rem;
-    cursor: pointer;
 }
 
 #sliderContainer .arrow.right {
     grid-column: 3 / 4;
-    grid-row: 1 / 2;
-    font-size: 4rem;
-    margin-left: 10px;
-    cursor: pointer;
 }
 
 #sliderContainer #dotContainer {
     grid-column: 2 / 3;
-    grid-row: 2 / 3;
+    grid-row: 3 / 4;
     width: 50px;
     display: flex;
     align-items: center;
@@ -271,15 +273,29 @@ footer .card:hover {
 }
 
 #sliderContainer .slide {
-    display: flex; 
-    gap: 20px
+    display: none;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+#sliderContainer .slide.active {
+    display: flex;
+    gap: 5px;
+    border: 1px solid #FFF;
+    box-shadow: 0 0 .3rem #FFF;
+    border-radius: 10px;
+    padding-right: 10px;
+}
+
+#sliderContainer .slide img {
+    border-radius: 10px 0 0 10px;
 }
 
 #sliderContainer .slide .sliderCharacters {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
+    padding-bottom: 10px;
 }
 
 #sliderContainer .slide .sliderCharacters .sliderCharacter {
@@ -288,8 +304,8 @@ footer .card:hover {
 }
 
 #sliderContainer .slide .sliderCharacters .sliderIcon {
-    width: 150px;
-    height: 150px;
+    width: 125px;
+    height: 125px;
 }
 
 #sliderContainer .slide .sliderCharacters .text {
@@ -298,6 +314,7 @@ footer .card:hover {
     align-items: center;
     gap: 20px;
 }
+
 /* ====================================== CIRCLE AND POPUP ================================ */
 
 .circle {
@@ -347,7 +364,7 @@ footer .card:hover {
 }
 
 .choice button.found:hover {
-    transform: none; 
+    transform: none;
 }
 
 /* =================================== FEEDBACK MESSAGE ==================================== */
@@ -364,7 +381,7 @@ footer .card:hover {
     border-radius: 5px;
     animation: fadeOut 5s ease-in-out forwards;
 }
-  
+
 @keyframes fadeOut {
     0% {
       opacity: 1;
@@ -400,13 +417,13 @@ input {
 }
 
 input::placeholder {
-    color: #FFF; 
+    color: #FFF;
 }
 
-input:focus { 
+input:focus {
     outline: none;
 }
-  
+
 /* ====================================== TABLE ======================================= */
 
 #tableContainer table {
@@ -461,7 +478,7 @@ tr {
         grid-row: 2 / 3;
         grid-column: 1 / 2;
         padding-top: 10px;
-    }      
+    }
 }
 
 @media (max-width: 400px) {
