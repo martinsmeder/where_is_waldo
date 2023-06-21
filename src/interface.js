@@ -1,5 +1,5 @@
 // TO DO:
-// 1. Get image slider to work and set/return the currentImage variable
+// 1. Reorganize code
 // 2. Update header icons based on currentImage
 // 3. Update coordinates/locations  based on currentImage
 // 4. Display correct leaderboard based on currentImage
@@ -76,8 +76,11 @@ export const Renderer = (() => {
 
       if (foundCharacters.includes(option.character)) {
         choice.classList.add("found");
-        // eslint-disable-next-line no-use-before-define
-        choice.removeEventListener("click", Controller.handleButtonClick);
+        choice.removeEventListener(
+          "click",
+          // eslint-disable-next-line no-use-before-define
+          Controller.handleCharacterButtonClick
+        );
       }
 
       popup.appendChild(choice);
@@ -91,7 +94,6 @@ export const Renderer = (() => {
     const scoreboardTableBody = document.getElementById("tableBody");
     scoreboardTableBody.textContent = "";
 
-    // THIS LINE CAUSES ERROR
     userTimes.forEach((userTime) => {
       const row = document.createElement("tr");
       const usernameCell = document.createElement("td");
@@ -120,7 +122,7 @@ export const Controller = (() => {
   const content = document.getElementById("content");
   const dropdownButton = document.getElementById("dropdownButton");
   const dropdownMenu = document.getElementById("dropdownMenu");
-  const startButton = document.querySelector(".startButton");
+  const startButtons = document.querySelectorAll(".startButton");
   const playAgainButton = document.getElementById("playAgainButton");
   const initialModal = document.querySelector(".modal.initial");
   const endgameModal = document.querySelector(".modal.endgame");
@@ -132,10 +134,13 @@ export const Controller = (() => {
   let isAddingCircle = false;
   let isAddingPopup = false;
   let selectedCharacter = null;
-  let currentSlide = 0;
+  let gameChoice = null;
   const foundCharacters = [];
 
-  const startGame = () => {
+  const startGame = (event) => {
+    const clickedButton = event.target;
+    gameChoice = clickedButton.dataset.choice;
+
     if (!isGameStarted) {
       InterfaceHelpers.hideModal(initialModal);
       InterfaceHelpers.startTimer();
@@ -143,7 +148,12 @@ export const Controller = (() => {
       isAddingCircle = true;
       isAddingPopup = true;
     }
+
+    return gameChoice;
   };
+
+  // Getter function used to return gameChoice from Controller module
+  const getGameChoice = () => gameChoice;
 
   const resetGame = () => {
     isGameStarted = false;
@@ -192,7 +202,7 @@ export const Controller = (() => {
     isAddingPopup = !isAddingPopup;
   };
 
-  const handleButtonClick = (event) => {
+  const handleCharacterButtonClick = (event) => {
     const { x, y } = LocationManager.getCoordinates(event);
     Renderer.removePopup();
 
@@ -223,57 +233,22 @@ export const Controller = (() => {
     return false;
   };
 
-  const updateActiveDot = () => {
-    const dots = document.querySelectorAll(".dot");
-    dots.forEach((dot, index) => {
-      if (index === currentSlide) {
-        dot.classList.add("active");
-      } else {
-        dot.classList.remove("active");
-      }
-    });
-  };
-
-  const updateActiveSlide = (direction) => {
-    const slides = document.querySelectorAll(".slide");
-    const totalSlides = slides.length;
-
-    slides[currentSlide].classList.remove("active");
-
-    if (direction === "left") {
-      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-      slides[currentSlide].style.transform = "translateX(-100%)";
-      slides[currentSlide].style.opacity = "0";
-    } else if (direction === "right") {
-      currentSlide = (currentSlide + 1) % totalSlides;
-      slides[currentSlide].style.transform = "translateX(100%)";
-      slides[currentSlide].style.opacity = "0";
-    }
-
-    slides[currentSlide].classList.add("active");
-
-    setTimeout(() => {
-      slides[currentSlide].style.transform = "translateX(0)";
-      slides[currentSlide].style.opacity = "1";
-    }, 0);
-  };
-
   const init = () => {
     leftArrow.addEventListener("click", () => {
-      updateActiveSlide("left");
-      updateActiveDot();
+      InterfaceHelpers.updateActiveSlide("left");
+      InterfaceHelpers.updateActiveDot();
     });
 
     rightArrow.addEventListener("click", () => {
-      updateActiveSlide("right");
-      updateActiveDot();
+      InterfaceHelpers.updateActiveSlide("right");
+      InterfaceHelpers.updateActiveDot();
     });
 
     content.addEventListener("click", handleContentClick);
 
     const buttons = document.querySelectorAll(".choice button");
     buttons.forEach((button) => {
-      button.addEventListener("click", handleButtonClick);
+      button.addEventListener("click", handleCharacterButtonClick);
     });
 
     dropdownButton.addEventListener("click", () => {
@@ -283,7 +258,9 @@ export const Controller = (() => {
         : "▼ Show Characters ▼";
     });
 
-    startButton.addEventListener("click", startGame);
+    startButtons.forEach((button) => {
+      button.addEventListener("click", startGame);
+    });
 
     const submitButton = document.getElementById("submitUsername");
     submitButton.addEventListener("click", () => {
@@ -295,13 +272,12 @@ export const Controller = (() => {
     InterfaceHelpers.hideModal(leaderboardModal);
     InterfaceHelpers.hideModal(endgameModal);
     InterfaceHelpers.showModal(initialModal);
-
-    updateActiveDot();
   };
 
   return {
     init,
-    handleButtonClick,
+    handleCharacterButtonClick,
+    getGameChoice,
   };
 })();
 

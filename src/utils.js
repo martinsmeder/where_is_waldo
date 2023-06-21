@@ -9,6 +9,7 @@ export const InterfaceHelpers = (() => {
   const timerElement = document.getElementById("timer");
 
   let timerInterval;
+  let currentSlide = 0;
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -100,7 +101,7 @@ export const InterfaceHelpers = (() => {
     button.textContent = text;
     button.type = "button";
     button.dataset.character = character;
-    button.addEventListener("click", Controller.handleButtonClick);
+    button.addEventListener("click", Controller.handleCharacterButtonClick);
     return button;
   };
 
@@ -129,6 +130,41 @@ export const InterfaceHelpers = (() => {
     submitButton.addEventListener("click", handleSubmit);
   };
 
+  const updateActiveDot = () => {
+    const dots = document.querySelectorAll(".dot");
+    dots.forEach((dot, index) => {
+      if (index === currentSlide) {
+        dot.classList.add("active");
+      } else {
+        dot.classList.remove("active");
+      }
+    });
+  };
+
+  const updateActiveSlide = (direction) => {
+    const slides = document.querySelectorAll(".slide");
+    const totalSlides = slides.length;
+
+    slides[currentSlide].classList.remove("active");
+
+    if (direction === "left") {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      slides[currentSlide].style.transform = "translateX(-100%)";
+      slides[currentSlide].style.opacity = "0";
+    } else if (direction === "right") {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      slides[currentSlide].style.transform = "translateX(100%)";
+      slides[currentSlide].style.opacity = "0";
+    }
+
+    slides[currentSlide].classList.add("active");
+
+    setTimeout(() => {
+      slides[currentSlide].style.transform = "translateX(0)";
+      slides[currentSlide].style.opacity = "1";
+    }, 0);
+  };
+
   return {
     startTimer,
     stopTimer,
@@ -144,6 +180,8 @@ export const InterfaceHelpers = (() => {
     createButton,
     removeElement,
     getLeaderboard,
+    updateActiveDot,
+    updateActiveSlide,
   };
 })();
 
