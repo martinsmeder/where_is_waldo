@@ -1,6 +1,8 @@
-// THINGS TO MAYBE DO:
-// 1. Improve code structure
-// 2. Add another map and image slider
+// TO DO:
+// 1. Get image slider to work and set/return the currentImage variable
+// 2. Update header icons based on currentImage
+// 3. Update coordinates/locations  based on currentImage
+// 4. Display correct leaderboard based on currentImage
 
 // eslint-disable-next-line import/no-cycle
 import { InterfaceHelpers } from "./utils";
@@ -118,7 +120,7 @@ export const Controller = (() => {
   const content = document.getElementById("content");
   const dropdownButton = document.getElementById("dropdownButton");
   const dropdownMenu = document.getElementById("dropdownMenu");
-  const startButton = document.getElementById("startButton");
+  const startButton = document.querySelector(".startButton");
   const playAgainButton = document.getElementById("playAgainButton");
   const initialModal = document.querySelector(".modal.initial");
   const endgameModal = document.querySelector(".modal.endgame");
