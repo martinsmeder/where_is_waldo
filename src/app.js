@@ -1,121 +1,16 @@
-// TO DO:
-// 1. Reorganize code
-// 2. Update header icons based on currentImage
-// 3. Update coordinates/locations  based on currentImage
-// 4. Display correct leaderboard based on currentImage
+/* eslint-disable import/no-cycle */
 
-// eslint-disable-next-line import/no-cycle
-import { InterfaceHelpers } from "./utils";
+// TO DO:
+// 1. ---
+// 2. Update header icons based on gameChoice
+// 3. Update coordinates/locations  based on gameChoice
+// 4. Display correct leaderboard based on gameChoice
+
+import { Renderer } from "./render";
+import { AppHelpers } from "./utils";
 import { FirestoreManager, LocationManager } from "./app-logic";
 
-console.log("interface.js says: this seem to be working");
-
-export const Renderer = (() => {
-  const content = document.getElementById("content");
-
-  const circles = [];
-  const popups = [];
-
-  const createFeedbackMsg = (message, x, y, color = "red") => {
-    const feedbackMsg = InterfaceHelpers.createDiv("feedback", message);
-    InterfaceHelpers.setPosition(feedbackMsg, x - 150, y - 100);
-    feedbackMsg.style.background = `rgba(${
-      color === "green" ? "0, 255, 0" : "255, 0, 0"
-    }, 0.7)`;
-    content.appendChild(feedbackMsg);
-
-    setTimeout(() => {
-      feedbackMsg.remove();
-    }, 5000);
-  };
-
-  const removeCircle = () => {
-    if (circles.length > 0) {
-      const circleToRemove = circles.pop();
-      InterfaceHelpers.removeElement(circleToRemove);
-    }
-  };
-
-  const createCircle = (x, y) => {
-    const circle = InterfaceHelpers.createDiv("circle");
-    InterfaceHelpers.setPosition(circle, x - 50, y - 50);
-    content.appendChild(circle);
-    circles.push(circle);
-  };
-
-  const removePopup = () => {
-    if (popups.length > 0) {
-      const popupToRemove = popups.pop();
-      InterfaceHelpers.removeElement(popupToRemove);
-    }
-  };
-
-  const createPopup = (x, y, foundCharacters) => {
-    const popup = InterfaceHelpers.createDiv("choice");
-
-    const maxX = window.innerWidth - 150;
-    const popupX = x + 60;
-
-    if (popupX > maxX) {
-      InterfaceHelpers.setPosition(popup, x - 160, y - 70);
-    } else {
-      InterfaceHelpers.setPosition(popup, x + 60, y - 70);
-    }
-
-    const options = [
-      { text: "Bowser", character: "bowser" },
-      { text: "Neo", character: "neo" },
-      { text: "Waldo", character: "waldo" },
-    ];
-
-    options.forEach((option) => {
-      const choice = InterfaceHelpers.createButton(
-        option.text,
-        option.character
-      );
-
-      if (foundCharacters.includes(option.character)) {
-        choice.classList.add("found");
-        choice.removeEventListener(
-          "click",
-          // eslint-disable-next-line no-use-before-define
-          Controller.handleCharacterButtonClick
-        );
-      }
-
-      popup.appendChild(choice);
-    });
-
-    content.appendChild(popup);
-    popups.push(popup);
-  };
-
-  const createTable = (userTimes) => {
-    const scoreboardTableBody = document.getElementById("tableBody");
-    scoreboardTableBody.textContent = "";
-
-    userTimes.forEach((userTime) => {
-      const row = document.createElement("tr");
-      const usernameCell = document.createElement("td");
-      usernameCell.textContent = userTime.username;
-      const timeCell = document.createElement("td");
-      timeCell.textContent = userTime.time;
-
-      row.appendChild(usernameCell);
-      row.appendChild(timeCell);
-      scoreboardTableBody.appendChild(row);
-    });
-  };
-
-  return {
-    createFeedbackMsg,
-    removeCircle,
-    createCircle,
-    removePopup,
-    createPopup,
-    createTable,
-  };
-})();
+console.log("app.js says: this seem to be working");
 
 // eslint-disable-next-line import/prefer-default-export
 export const Controller = (() => {
@@ -142,11 +37,12 @@ export const Controller = (() => {
     gameChoice = clickedButton.dataset.choice;
 
     if (!isGameStarted) {
-      InterfaceHelpers.hideModal(initialModal);
-      InterfaceHelpers.startTimer();
+      AppHelpers.hideModal(initialModal);
+      AppHelpers.startTimer();
       isGameStarted = true;
       isAddingCircle = true;
       isAddingPopup = true;
+      AppHelpers.setBackgroundImage();
     }
 
     return gameChoice;
@@ -162,12 +58,12 @@ export const Controller = (() => {
     selectedCharacter = null;
     foundCharacters.length = 0;
 
-    InterfaceHelpers.resetCount();
-    InterfaceHelpers.resetTimer();
-    InterfaceHelpers.clearCharacterIcons();
-    InterfaceHelpers.hideModal(leaderboardModal);
-    InterfaceHelpers.hideModal(endgameModal);
-    InterfaceHelpers.showModal(initialModal);
+    AppHelpers.resetCount();
+    AppHelpers.resetTimer();
+    AppHelpers.clearCharacterIcons();
+    AppHelpers.hideModal(leaderboardModal);
+    AppHelpers.hideModal(endgameModal);
+    AppHelpers.showModal(initialModal);
   };
 
   const handleContentClick = async (event) => {
@@ -214,17 +110,17 @@ export const Controller = (() => {
         selectedCharacter.slice(1).toLowerCase();
       Renderer.createFeedbackMsg(`Found ${formattedCharacter}!`, x, y, "green");
 
-      InterfaceHelpers.grayOutCharacterIcon(clickedCharacter);
-      InterfaceHelpers.updateCount();
+      AppHelpers.grayOutCharacterIcon(clickedCharacter);
+      AppHelpers.updateCount();
 
       foundCharacters.push(clickedCharacter);
       Renderer.removePopup();
       Renderer.createPopup(x, y, foundCharacters);
 
       if (foundCharacters.length === 3) {
-        InterfaceHelpers.stopTimer();
-        InterfaceHelpers.getLeaderboard();
-        InterfaceHelpers.showModal(endgameModal);
+        AppHelpers.stopTimer();
+        AppHelpers.getLeaderboard();
+        AppHelpers.showModal(endgameModal);
       }
     } else {
       Renderer.createFeedbackMsg("Keep looking!", x, y);
@@ -235,13 +131,13 @@ export const Controller = (() => {
 
   const init = () => {
     leftArrow.addEventListener("click", () => {
-      InterfaceHelpers.updateActiveSlide("left");
-      InterfaceHelpers.updateActiveDot();
+      AppHelpers.updateActiveSlide("left");
+      AppHelpers.updateActiveDot();
     });
 
     rightArrow.addEventListener("click", () => {
-      InterfaceHelpers.updateActiveSlide("right");
-      InterfaceHelpers.updateActiveDot();
+      AppHelpers.updateActiveSlide("right");
+      AppHelpers.updateActiveDot();
     });
 
     content.addEventListener("click", handleContentClick);
@@ -264,14 +160,14 @@ export const Controller = (() => {
 
     const submitButton = document.getElementById("submitUsername");
     submitButton.addEventListener("click", () => {
-      InterfaceHelpers.hideModal(endgameModal);
+      AppHelpers.hideModal(endgameModal);
     });
 
     playAgainButton.addEventListener("click", resetGame);
 
-    InterfaceHelpers.hideModal(leaderboardModal);
-    InterfaceHelpers.hideModal(endgameModal);
-    InterfaceHelpers.showModal(initialModal);
+    AppHelpers.hideModal(leaderboardModal);
+    AppHelpers.hideModal(endgameModal);
+    AppHelpers.showModal(initialModal);
   };
 
   return {

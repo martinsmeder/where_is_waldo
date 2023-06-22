@@ -1,11 +1,12 @@
 /* eslint-disable no-param-reassign */
 // eslint-disable-next-line import/no-cycle
-import { Controller, Renderer } from "./interface";
+import { Controller } from "./app";
+import { Renderer } from "./render";
 import { FirestoreManager } from "./app-logic";
 
 console.log("utils.js says: this seem to be working");
 
-export const InterfaceHelpers = (() => {
+export const AppHelpers = (() => {
   const timerElement = document.getElementById("timer");
 
   let timerInterval;
@@ -81,36 +82,6 @@ export const InterfaceHelpers = (() => {
     modal.style.display = "none";
   };
 
-  const setPosition = (element, x, y) => {
-    const positioned = element;
-    positioned.style.left = `${x}px`;
-    positioned.style.top = `${y}px`;
-  };
-
-  const createDiv = (className, text) => {
-    const div = document.createElement("div");
-    div.className = className;
-    if (text) {
-      div.textContent = text;
-    }
-    return div;
-  };
-
-  const createButton = (text, character) => {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.type = "button";
-    button.dataset.character = character;
-    button.addEventListener("click", Controller.handleCharacterButtonClick);
-    return button;
-  };
-
-  const removeElement = (element) => {
-    if (element.parentNode) {
-      element.parentNode.removeChild(element);
-    }
-  };
-
   const getLeaderboard = () => {
     const usernameInput = document.querySelector(".endgame input");
     const submitButton = document.getElementById("submitUsername");
@@ -121,9 +92,7 @@ export const InterfaceHelpers = (() => {
         FirestoreManager.storeUserTime(username, timerElement.textContent);
         const userTimes = await FirestoreManager.getAllUserTimes();
         Renderer.createTable(userTimes);
-        InterfaceHelpers.showModal(
-          document.querySelector(".modal.leaderboard")
-        );
+        showModal(document.querySelector(".modal.leaderboard"));
       }
     };
 
@@ -165,6 +134,22 @@ export const InterfaceHelpers = (() => {
     }, 0);
   };
 
+  const setBackgroundImage = () => {
+    const backgroundImg = document.querySelector("#backgroundImg");
+    const gameChoice = Controller.getGameChoice();
+
+    switch (gameChoice) {
+      case "cyberpunk":
+        backgroundImg.src = "../dist/images/cyberpunk-city.jpg";
+        break;
+      case "robot":
+        backgroundImg.src = "../dist/images/robot-city.jpg";
+        break;
+      default:
+        backgroundImg.src = "../dist/images/cyberpunk-city.jpg";
+    }
+  };
+
   return {
     startTimer,
     stopTimer,
@@ -175,13 +160,10 @@ export const InterfaceHelpers = (() => {
     clearCharacterIcons,
     showModal,
     hideModal,
-    setPosition,
-    createDiv,
-    createButton,
-    removeElement,
     getLeaderboard,
     updateActiveDot,
     updateActiveSlide,
+    setBackgroundImage,
   };
 })();
 
