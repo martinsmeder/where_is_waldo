@@ -150,6 +150,33 @@ export const AppHelpers = (() => {
     }
   };
 
+  const setCharacterIcons = () => {
+    const icons = document.querySelectorAll(".character > .icon");
+    const titles = document.querySelectorAll(".character > .text > h3");
+    const gameChoice = Controller.getGameChoice();
+
+    // Data structure implemented as an object
+    const characterData = {
+      cyberpunk: [
+        { icon: "../dist/images/bowser.png", title: "Bowser" },
+        { icon: "../dist/images/neo.png", title: "Neo" },
+        { icon: "../dist/images/waldo.png", title: "Waldo" },
+      ],
+      robot: [
+        { icon: "../dist/images/meg.png", title: "Meg" },
+        { icon: "../dist/images/pikachu.png", title: "Pikachu" },
+        { icon: "../dist/images/mike.png", title: "Mike" },
+      ],
+    };
+
+    const characters = characterData[gameChoice] || characterData.default;
+
+    characters.forEach((character, index) => {
+      icons[index].src = character.icon;
+      titles[index].textContent = character.title;
+    });
+  };
+
   return {
     startTimer,
     stopTimer,
@@ -164,6 +191,7 @@ export const AppHelpers = (() => {
     updateActiveDot,
     updateActiveSlide,
     setBackgroundImage,
+    setCharacterIcons,
   };
 })();
 

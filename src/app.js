@@ -2,9 +2,13 @@
 
 // TO DO:
 // 1. ---
-// 2. Update header icons based on gameChoice
-// 3. Update coordinates/locations  based on gameChoice
-// 4. Display correct leaderboard based on gameChoice
+// 2. ---
+// 3. Update popup buttons based on gameChoice
+// 4. Update coordinates/locations based on gameChoice
+// 5. Display correct leaderboard based on gameChoice
+// 6. Media queries for slider
+// 7. Organize/optimize code and shrink images
+// 8. Merge and push to gh-pages in a way that works
 
 import { Renderer } from "./render";
 import { AppHelpers } from "./utils";
@@ -43,6 +47,7 @@ export const Controller = (() => {
       isAddingCircle = true;
       isAddingPopup = true;
       AppHelpers.setBackgroundImage();
+      AppHelpers.setCharacterIcons();
     }
 
     return gameChoice;
