@@ -116,17 +116,17 @@ header #dropdownMenu.show {
     box-shadow: 0 0 .9rem #FFF
 }
 
-#bowser p, #meg p  {
+.character.easy p, .sliderCharacter.easy p {
     color: rgb(0, 255, 0);
     text-shadow: 0 0 .3rem rgb(0, 0, 0);
 }
 
-#neo p, #pikachu p {
+.character.medium p, .sliderCharacter.medium p {
     color: rgb(255, 166, 0);
     text-shadow: 0 0 .3rem rgb(0, 0, 0);
 }
 
-#waldo p, #mike p {
+.character.hard p, .sliderCharacter.hard p {
     color: rgb(255, 0, 0);
     text-shadow: 0 0 .3rem rgb(0, 0, 0);
 }
