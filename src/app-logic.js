@@ -129,9 +129,9 @@ export const FirestoreManager = (() => {
     }
   };
 
-  const storeUserTime = async (username, time) => {
+  const storeUserTime = async (username, time, gameChoice) => {
     try {
-      await setDoc(doc(db, "userTimes", username), { time });
+      await setDoc(doc(db, `userTimes-${gameChoice}`, username), { time });
       console.log(`User time stored successfully for ${username}`);
     } catch (error) {
       console.error(`Error storing user time for ${username}:`, error);
@@ -139,9 +139,9 @@ export const FirestoreManager = (() => {
   };
 
   // eslint-disable-next-line consistent-return
-  const getAllUserTimes = async () => {
+  const getAllUserTimes = async (gameChoice) => {
     try {
-      const snapshot = await getDocs(collection(db, "userTimes"));
+      const snapshot = await getDocs(collection(db, `userTimes-${gameChoice}`));
 
       const userTimes = [];
       snapshot.forEach((doc) => {

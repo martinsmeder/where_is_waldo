@@ -82,15 +82,19 @@ export const AppHelpers = (() => {
     modal.style.display = "none";
   };
 
-  const getLeaderboard = () => {
+  const getLeaderboard = (gameChoice) => {
     const usernameInput = document.querySelector(".endgame input");
     const submitButton = document.getElementById("submitUsername");
 
     const handleSubmit = async () => {
       const username = usernameInput.value.trim();
       if (username) {
-        FirestoreManager.storeUserTime(username, timerElement.textContent);
-        const userTimes = await FirestoreManager.getAllUserTimes();
+        FirestoreManager.storeUserTime(
+          username,
+          timerElement.textContent,
+          gameChoice
+        );
+        const userTimes = await FirestoreManager.getAllUserTimes(gameChoice);
         Renderer.createTable(userTimes);
         showModal(document.querySelector(".modal.leaderboard"));
       }

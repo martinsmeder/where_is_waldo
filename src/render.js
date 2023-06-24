@@ -134,6 +134,13 @@ export const Renderer = (() => {
   };
 
   const createTable = (userTimes) => {
+    const gameChoice = Controller.getGameChoice();
+
+    const leaderboardHeading = document.querySelector("#leaderboardHeading");
+    const formattedGameChoice =
+      gameChoice.charAt(0).toUpperCase() + gameChoice.slice(1).toLowerCase();
+    leaderboardHeading.textContent = `Leaderboard For ${formattedGameChoice}:`;
+
     const scoreboardTableBody = document.getElementById("tableBody");
     scoreboardTableBody.textContent = "";
 

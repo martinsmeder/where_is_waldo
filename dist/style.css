@@ -427,7 +427,7 @@ input:focus {
 /* ====================================== TABLE ======================================= */
 
 #tableContainer table {
-    width: 200px;
+    width: 400px;
     display: flex;
     flex-direction: column;
     gap: 20px;
