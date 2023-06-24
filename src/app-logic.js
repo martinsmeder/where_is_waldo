@@ -12,6 +12,9 @@ export const LocationManager = (() => {
     bowser: { left: 1430, top: 3130, right: 1730, bottom: 3424 },
     neo: { left: 690, top: 4700, right: 900, bottom: 4900 },
     waldo: { left: 1450, top: 6550, right: 1650, bottom: 6750 },
+    meg: { left: 256, top: 484, right: 456, bottom: 684 },
+    pikachu: { left: 982, top: 1437, right: 1182, bottom: 1637 },
+    mike: { left: 1121, top: 1538, right: 1321, bottom: 1738 },
   };
 
   const getCoordinates = (event) => {
@@ -32,37 +35,23 @@ export const LocationManager = (() => {
     return { x, y, scaledX, scaledY };
   };
 
-  const isWithinArea = (coordinates, area) => {
-    const { scaledX, scaledY } = coordinates;
-    const { left, top, right, bottom } = area;
+  const getCoordinateArea = (event) => {
+    const { scaledX, scaledY } = getCoordinates(event);
 
-    return (
-      scaledX >= left && scaledX <= right && scaledY >= top && scaledY <= bottom
-    );
-  };
+    const area = {
+      left: scaledX - 100,
+      top: scaledY - 100,
+      right: scaledX + 100,
+      bottom: scaledY + 100,
+    };
 
-  const captureCharacterArea = (event) => {
-    const coordinates = getCoordinates(event);
-    // console.log(`X: ${coordinates.x}, Y: ${coordinates.y}`);
-
-    let characterFound = false;
-
-    Object.keys(characters).forEach((character) => {
-      if (isWithinArea(coordinates, characters[character])) {
-        console.log(`Found ${character}`);
-        characterFound = true;
-      }
-    });
-
-    if (!characterFound) {
-      console.log("No character found");
-    }
+    console.log(`Area: ${JSON.stringify(area)}`);
   };
 
   return {
     characters,
     getCoordinates,
-    captureCharacterArea,
+    getCoordinateArea,
   };
 })();
 
@@ -107,7 +96,7 @@ export const FirestoreManager = (() => {
     }
   };
 
-  const verifyClickedPosition = async (x, y) => {
+  const verifyClickedPosition = async (x, y, gameChoice) => {
     try {
       const snapshot = await getDocs(collection(db, "characterLocations"));
       let foundCharacter = null;
@@ -116,9 +105,20 @@ export const FirestoreManager = (() => {
         const character = doc.id;
         const { left, top, right, bottom } = doc.data();
 
-        if (x >= left && x <= right && y >= top && y <= bottom) {
-          console.log(`Clicked within ${character}'s area.`);
-          foundCharacter = character;
+        if (
+          (gameChoice === "cyberpunk" &&
+            (character === "bowser" ||
+              character === "neo" ||
+              character === "waldo")) ||
+          (gameChoice === "robot" &&
+            (character === "meg" ||
+              character === "pikachu" ||
+              character === "mike"))
+        ) {
+          if (x >= left && x <= right && y >= top && y <= bottom) {
+            console.log(`Clicked within ${character}'s area.`);
+            foundCharacter = character;
+          }
         }
       });
 

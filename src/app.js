@@ -3,8 +3,8 @@
 // TO DO:
 // 1. ---
 // 2. ---
-// 3. Update popup buttons based on gameChoice
-// 4. Update coordinates/locations based on gameChoice
+// 3. ---
+// 4. ---
 // 5. Display correct leaderboard based on gameChoice
 // 6. Media queries for slider
 // 7. Organize/optimize code and shrink images
@@ -89,7 +89,8 @@ export const Controller = (() => {
       try {
         selectedCharacter = await FirestoreManager.verifyClickedPosition(
           scaledX,
-          scaledY
+          scaledY,
+          gameChoice
         );
       } catch (error) {
         console.error("Error verifying clicked position:", error);
