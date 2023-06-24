@@ -94,11 +94,23 @@ export const Renderer = (() => {
       RendererHelpers.setPosition(popup, x + 60, y - 70);
     }
 
-    const options = [
-      { text: "Bowser", character: "bowser" },
-      { text: "Neo", character: "neo" },
-      { text: "Waldo", character: "waldo" },
-    ];
+    const gameChoice = Controller.getGameChoice();
+
+    let options;
+
+    if (gameChoice === "cyberpunk") {
+      options = [
+        { text: "Bowser", character: "bowser" },
+        { text: "Neo", character: "neo" },
+        { text: "Waldo", character: "waldo" },
+      ];
+    } else if (gameChoice === "robot") {
+      options = [
+        { text: "Meg", character: "meg" },
+        { text: "Pikachu", character: "pikachu" },
+        { text: "Mike", character: "mike" },
+      ];
+    }
 
     options.forEach((option) => {
       const choice = RendererHelpers.createButton(
@@ -110,7 +122,6 @@ export const Renderer = (() => {
         choice.classList.add("found");
         choice.removeEventListener(
           "click",
-          // eslint-disable-next-line no-use-before-define
           Controller.handleCharacterButtonClick
         );
       }
