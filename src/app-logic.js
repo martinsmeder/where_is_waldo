@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { app, db } from "./firebase";
 
 console.log("app-logic.js says: this seem to be working");
@@ -129,6 +129,17 @@ export const FirestoreManager = (() => {
     }
   };
 
+  const checkUserExists = async (username, gameChoice) => {
+    try {
+      const userDocRef = doc(db, `userTimes-${gameChoice}`, username);
+      const userDocSnapshot = await getDoc(userDocRef);
+      return userDocSnapshot.exists();
+    } catch (error) {
+      console.error(`Error checking if user ${username} exists:`, error);
+      return false;
+    }
+  };
+
   const storeUserTime = async (username, time, gameChoice) => {
     try {
       await setDoc(doc(db, `userTimes-${gameChoice}`, username), { time });
@@ -166,6 +177,7 @@ export const FirestoreManager = (() => {
     storeCharacterLocations,
     getCharacterLocations,
     verifyClickedPosition,
+    checkUserExists,
     storeUserTime,
     getAllUserTimes,
   };

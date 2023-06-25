@@ -89,6 +89,15 @@ export const AppHelpers = (() => {
     const handleSubmit = async () => {
       const username = usernameInput.value.trim();
       if (username) {
+        const userExists = await FirestoreManager.checkUserExists(
+          username,
+          gameChoice
+        );
+
+        if (userExists) {
+          return;
+        }
+
         FirestoreManager.storeUserTime(
           username,
           timerElement.textContent,

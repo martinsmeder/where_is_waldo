@@ -424,6 +424,10 @@ input:focus {
     outline: none;
 }
 
+#usernameError {
+    color: #ff0000;
+}
+
 /* ====================================== TABLE ======================================= */
 
 #tableContainer table {

@@ -28,6 +28,8 @@ export const Controller = (() => {
   const leaderboardModal = document.querySelector(".modal.leaderboard");
   const leftArrow = document.querySelector(".arrow.left");
   const rightArrow = document.querySelector(".arrow.right");
+  const usernameInput = document.querySelector(".endgame input");
+  const usernameError = document.querySelector("#usernameError");
 
   let isGameStarted = false;
   let isAddingCircle = false;
@@ -62,6 +64,8 @@ export const Controller = (() => {
     isAddingPopup = false;
     selectedCharacter = null;
     foundCharacters.length = 0;
+    usernameInput.value = "";
+    usernameError.textContent = "";
 
     AppHelpers.resetCount();
     AppHelpers.resetTimer();
@@ -165,8 +169,22 @@ export const Controller = (() => {
     });
 
     const submitButton = document.getElementById("submitUsername");
-    submitButton.addEventListener("click", () => {
-      AppHelpers.hideModal(endgameModal);
+    submitButton.addEventListener("click", async () => {
+      const username = usernameInput.value.trim();
+
+      if (username) {
+        const userExists = await FirestoreManager.checkUserExists(
+          username,
+          gameChoice
+        );
+
+        if (userExists) {
+          usernameError.textContent = `Username "${username}" is already taken!`;
+          return;
+        }
+
+        AppHelpers.hideModal(endgameModal);
+      }
     });
 
     playAgainButton.addEventListener("click", resetGame);
