@@ -12,25 +12,28 @@ export const AppHelpers = (() => {
   let timerInterval;
   let currentSlide = 0;
 
-  const formatTime = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+  const formatTime = (milliseconds) => {
+    const hours = Math.floor(milliseconds / 3600000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
+    const seconds = Math.floor((milliseconds % 60000) / 1000);
     const formattedHours = String(hours).padStart(2, "0");
     const formattedMinutes = String(minutes).padStart(2, "0");
-    const formattedSeconds = String(seconds % 60).padStart(2, "0");
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    const formattedSeconds = String(seconds).padStart(2, "0");
+    const formattedMilliseconds = String(milliseconds % 1000).padStart(3, "0");
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}.${formattedMilliseconds}`;
   };
 
   const startTimer = () => {
-    let seconds = 0;
+    const startTime = new Date().getTime();
 
     const updateTimer = () => {
-      seconds += 1;
-      const formattedTime = formatTime(seconds);
+      const currentTime = new Date().getTime();
+      const elapsedMilliseconds = currentTime - startTime;
+      const formattedTime = formatTime(elapsedMilliseconds);
       timerElement.textContent = formattedTime;
     };
 
-    timerInterval = setInterval(updateTimer, 1000);
+    timerInterval = setInterval(updateTimer, 1);
   };
 
   const stopTimer = () => {
@@ -103,8 +106,8 @@ export const AppHelpers = (() => {
           timerElement.textContent,
           gameChoice
         );
-        const userTimes = await FirestoreManager.getAllUserTimes(gameChoice);
-        Renderer.createTable(userTimes);
+        const top10UserTimes = await FirestoreManager.getTop10Times(gameChoice);
+        Renderer.createTable(top10UserTimes);
         showModal(document.querySelector(".modal.leaderboard"));
       }
     };

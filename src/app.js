@@ -5,7 +5,7 @@
 // 2. ---
 // 3. ---
 // 4. ---
-// 5. Solve issue with same usernames
+// 5. Show top 10-20 and the users time if they didnt cut it and otherwise
 // 6. Media queries for slider, and other modals, leaderboard max height with overflow scroll
 // 7. Organize/optimize code and shrink images
 // 8. Merge and push to gh-pages in a way that works

@@ -133,18 +133,22 @@ export const Renderer = (() => {
     popups.push(popup);
   };
 
-  const createTable = (userTimes) => {
+  const createTable = (top10UserTimes) => {
     const gameChoice = Controller.getGameChoice();
 
     const leaderboardHeading = document.querySelector("#leaderboardHeading");
     const formattedGameChoice =
       gameChoice.charAt(0).toUpperCase() + gameChoice.slice(1).toLowerCase();
-    leaderboardHeading.textContent = `Leaderboard For ${formattedGameChoice}:`;
+    leaderboardHeading.textContent = `Top 10 For ${formattedGameChoice}:`;
+
+    const timerElement = document.querySelector("#timer");
+    const currentUserTime = document.querySelector("#currentUserTime");
+    currentUserTime.textContent = `Your time: ${timerElement.textContent}.`;
 
     const scoreboardTableBody = document.getElementById("tableBody");
     scoreboardTableBody.textContent = "";
 
-    userTimes.forEach((userTime) => {
+    top10UserTimes.forEach((userTime) => {
       const row = document.createElement("tr");
       const usernameCell = document.createElement("td");
       usernameCell.textContent = userTime.username;

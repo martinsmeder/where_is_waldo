@@ -150,7 +150,7 @@ export const FirestoreManager = (() => {
   };
 
   // eslint-disable-next-line consistent-return
-  const getAllUserTimes = async (gameChoice) => {
+  const getTop10Times = async (gameChoice) => {
     try {
       const snapshot = await getDocs(collection(db, `userTimes-${gameChoice}`));
 
@@ -163,11 +163,13 @@ export const FirestoreManager = (() => {
 
       userTimes.sort((a, b) => a.time.localeCompare(b.time));
 
-      userTimes.forEach((userTime) => {
+      const top10UserTimes = userTimes.slice(0, 10);
+
+      top10UserTimes.forEach((userTime) => {
         console.log(`Username: ${userTime.username}, Time: ${userTime.time}`);
       });
 
-      return userTimes;
+      return top10UserTimes;
     } catch (error) {
       console.error("Error retrieving user times:", error);
     }
@@ -179,6 +181,6 @@ export const FirestoreManager = (() => {
     verifyClickedPosition,
     checkUserExists,
     storeUserTime,
-    getAllUserTimes,
+    getTop10Times,
   };
 })();
