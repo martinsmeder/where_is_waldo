@@ -6,7 +6,7 @@
 // 3. ---
 // 4. ---
 // 5. ---
-// 6. Media queries for slider, and other modals, leaderboard max height with overflow scroll
+// 6. Media queries for slider, and other modals
 // 7. Organize/optimize code and shrink images
 // 8. Merge and push to gh-pages in a way that works
 

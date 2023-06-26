@@ -451,14 +451,18 @@ tr {
 
 /* ==================================== MEDIA QUERIES ================================== */
 
+@media (max-width: 750px), (max-height: 750px) {
+    .modal.initial {
+        transform: scale(.7);
+    }
+}
+
 @media (max-width: 600px) {
     header .icon {
         width: 100px;
         height: 100px;
     }
-}
 
-@media (max-width: 520px) {
     footer .card {
         padding: 20px;
         font-size: 1rem;
@@ -486,7 +490,17 @@ tr {
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px), (max-height: 500px) {
+    .modal.initial {
+        transform: scale(.55);
+    }
+
+    .modal {
+        transform: scale(.8);
+    }
+}
+
+@media (max-width: 400px), (max-height: 400px) {
     header {
         font-size: .7rem;
     }
@@ -507,7 +521,15 @@ tr {
 
     footer .card {
         padding: 15px;
-        font-size: .7rem;
+        font-size: .6rem;
+    }
+
+    .modal.initial {
+        transform: scale(.4);
+    }
+
+    .modal {
+        transform: scale(.55);
     }
 }
 
