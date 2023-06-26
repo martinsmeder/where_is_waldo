@@ -6,23 +6,22 @@
 // 3. ---
 // 4. ---
 // 5. ---
-// 6. Media queries for slider, and other modals
-// 7. Organize/optimize code and shrink images
+// 6. ---
+// 7. Add comments and shrink images
 // 8. Merge and push to gh-pages in a way that works
 
 import { Renderer } from "./render";
 import { AppHelpers } from "./utils";
 import { FirestoreManager, LocationManager } from "./app-logic";
 
-console.log("app.js says: this seem to be working");
-
 // eslint-disable-next-line import/prefer-default-export
 export const Controller = (() => {
-  const content = document.getElementById("content");
-  const dropdownButton = document.getElementById("dropdownButton");
-  const dropdownMenu = document.getElementById("dropdownMenu");
+  const content = document.querySelector("#content");
+  const dropdownButton = document.querySelector("#dropdownButton");
+  const dropdownMenu = document.querySelector("#dropdownMenu");
   const startButtons = document.querySelectorAll(".startButton");
-  const playAgainButton = document.getElementById("playAgainButton");
+  const playAgainButton = document.querySelector("#playAgainButton");
+  const submitButton = document.querySelector("#submitUsername");
   const initialModal = document.querySelector(".modal.initial");
   const endgameModal = document.querySelector(".modal.endgame");
   const leaderboardModal = document.querySelector(".modal.leaderboard");
@@ -114,7 +113,6 @@ export const Controller = (() => {
     Renderer.removePopup();
 
     const clickedCharacter = event.target.dataset.character;
-    console.log(`Clicked character: ${clickedCharacter}`);
 
     if (selectedCharacter === clickedCharacter) {
       const formattedCharacter =
@@ -131,7 +129,7 @@ export const Controller = (() => {
 
       if (foundCharacters.length === 3) {
         AppHelpers.stopTimer();
-        AppHelpers.getLeaderboard(gameChoice);
+        AppHelpers.getLeaderboard(gameChoice, submitButton);
         AppHelpers.showModal(endgameModal);
       }
     } else {
@@ -168,25 +166,6 @@ export const Controller = (() => {
 
     startButtons.forEach((button) => {
       button.addEventListener("click", startGame);
-    });
-
-    const submitButton = document.getElementById("submitUsername");
-    submitButton.addEventListener("click", async () => {
-      const username = usernameInput.value.trim();
-
-      if (username) {
-        const userExists = await FirestoreManager.checkUserExists(
-          username,
-          gameChoice
-        );
-
-        if (userExists) {
-          usernameError.textContent = `Username "${username}" is already taken!`;
-          return;
-        }
-
-        AppHelpers.hideModal(endgameModal);
-      }
     });
 
     playAgainButton.addEventListener("click", resetGame);

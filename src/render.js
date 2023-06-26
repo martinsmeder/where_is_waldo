@@ -1,8 +1,6 @@
 // eslint-disable-next-line import/no-cycle
 import { Controller } from "./app";
 
-console.log("render.js says: this seem to be working");
-
 export const RendererHelpers = (() => {
   const setPosition = (element, x, y) => {
     const positioned = element;
@@ -43,7 +41,7 @@ export const RendererHelpers = (() => {
 })();
 
 export const Renderer = (() => {
-  const content = document.getElementById("content");
+  const content = document.querySelector("#content");
 
   const circles = [];
   const popups = [];
@@ -145,7 +143,7 @@ export const Renderer = (() => {
     const currentUserTime = document.querySelector("#currentUserTime");
     currentUserTime.textContent = `Your time: ${timerElement.textContent}.`;
 
-    const scoreboardTableBody = document.getElementById("tableBody");
+    const scoreboardTableBody = document.querySelector("#tableBody");
     scoreboardTableBody.textContent = "";
 
     top10UserTimes.forEach((userTime) => {

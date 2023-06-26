@@ -4,10 +4,8 @@ import { Controller } from "./app";
 import { Renderer } from "./render";
 import { FirestoreManager } from "./app-logic";
 
-console.log("utils.js says: this seem to be working");
-
 export const AppHelpers = (() => {
-  const timerElement = document.getElementById("timer");
+  const timerElement = document.querySelector("#timer");
 
   let timerInterval;
   let currentSlide = 0;
@@ -46,31 +44,27 @@ export const AppHelpers = (() => {
   };
 
   const updateCount = () => {
-    console.log("updateCount called");
-    const countElement = document.getElementById("count");
+    const countElement = document.querySelector("#count");
     const foundCount = document.querySelectorAll(".grayed-out").length;
     countElement.textContent = `${foundCount}/3`;
   };
 
   const resetCount = () => {
-    const countElement = document.getElementById("count");
+    const countElement = document.querySelector("#count");
     countElement.textContent = "0/3";
   };
 
   const grayOutCharacterIcon = (characterId) => {
-    console.log(`grayOutCharacterIcon called with characterId: ${characterId}`);
     const characterElement = document.querySelector(`#${characterId}`);
     if (characterElement) {
       characterElement.classList.add("grayed-out");
-    } else {
-      console.log("Character element not found!");
     }
   };
 
   const clearCharacterIcons = () => {
     const characterIds = ["bowser", "neo", "waldo"];
     characterIds.forEach((characterId) => {
-      const characterElement = document.getElementById(characterId);
+      const characterElement = document.querySelector(`#${characterId}`);
       if (characterElement) {
         characterElement.classList.remove("grayed-out");
       }
@@ -89,9 +83,8 @@ export const AppHelpers = (() => {
     modal.style.display = "none";
   };
 
-  const getLeaderboard = (gameChoice) => {
+  const getLeaderboard = (gameChoice, submitButton) => {
     const usernameInput = document.querySelector(".endgame input");
-    const submitButton = document.getElementById("submitUsername");
 
     const handleSubmit = async () => {
       const username = usernameInput.value.trim();
@@ -116,7 +109,10 @@ export const AppHelpers = (() => {
       }
     };
 
-    submitButton.addEventListener("click", handleSubmit);
+    submitButton.addEventListener("click", () => {
+      handleSubmit();
+      hideModal(document.querySelector(".modal.endgame"));
+    });
   };
 
   const updateActiveDot = () => {
@@ -175,7 +171,6 @@ export const AppHelpers = (() => {
     const titles = document.querySelectorAll(".character > .text > h3");
     const gameChoice = Controller.getGameChoice();
 
-    // Data structure implemented as an object
     const characterData = {
       cyberpunk: [
         { icon: "../dist/images/bowser.png", title: "Bowser" },

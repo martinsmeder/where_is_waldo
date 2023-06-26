@@ -1,9 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { app, db } from "./firebase";
-
-console.log("app-logic.js says: this seem to be working");
+import { db, collection, doc, getDoc, getDocs, setDoc } from "./firebase";
 
 export const LocationManager = (() => {
   const backgroundImg = document.getElementById("backgroundImg");
@@ -116,7 +113,6 @@ export const FirestoreManager = (() => {
               character === "mike"))
         ) {
           if (x >= left && x <= right && y >= top && y <= bottom) {
-            console.log(`Clicked within ${character}'s area.`);
             foundCharacter = character;
           }
         }
@@ -143,7 +139,6 @@ export const FirestoreManager = (() => {
   const storeUserTime = async (username, time, gameChoice) => {
     try {
       await setDoc(doc(db, `userTimes-${gameChoice}`, username), { time });
-      console.log(`User time stored successfully for ${username}`);
     } catch (error) {
       console.error(`Error storing user time for ${username}:`, error);
     }
@@ -164,10 +159,6 @@ export const FirestoreManager = (() => {
       userTimes.sort((a, b) => a.time.localeCompare(b.time));
 
       const top10UserTimes = userTimes.slice(0, 10);
-
-      top10UserTimes.forEach((userTime) => {
-        console.log(`Username: ${userTime.username}, Time: ${userTime.time}`);
-      });
 
       return top10UserTimes;
     } catch (error) {
