@@ -5,7 +5,7 @@
 // 2. ---
 // 3. ---
 // 4. ---
-// 5. Show top 10-20 and the users time if they didnt cut it and otherwise
+// 5. ---
 // 6. Media queries for slider, and other modals, leaderboard max height with overflow scroll
 // 7. Organize/optimize code and shrink images
 // 8. Merge and push to gh-pages in a way that works
@@ -50,6 +50,7 @@ export const Controller = (() => {
       isAddingPopup = true;
       AppHelpers.setBackgroundImage();
       AppHelpers.setCharacterIcons();
+      AppHelpers.setCharacterId();
     }
 
     return gameChoice;
@@ -113,6 +114,7 @@ export const Controller = (() => {
     Renderer.removePopup();
 
     const clickedCharacter = event.target.dataset.character;
+    console.log(`Clicked character: ${clickedCharacter}`);
 
     if (selectedCharacter === clickedCharacter) {
       const formattedCharacter =

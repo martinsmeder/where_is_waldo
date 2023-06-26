@@ -46,6 +46,7 @@ export const AppHelpers = (() => {
   };
 
   const updateCount = () => {
+    console.log("updateCount called");
     const countElement = document.getElementById("count");
     const foundCount = document.querySelectorAll(".grayed-out").length;
     countElement.textContent = `${foundCount}/3`;
@@ -57,9 +58,12 @@ export const AppHelpers = (() => {
   };
 
   const grayOutCharacterIcon = (characterId) => {
-    const characterElement = document.getElementById(characterId);
+    console.log(`grayOutCharacterIcon called with characterId: ${characterId}`);
+    const characterElement = document.querySelector(`#${characterId}`);
     if (characterElement) {
       characterElement.classList.add("grayed-out");
+    } else {
+      console.log("Character element not found!");
     }
   };
 
@@ -193,6 +197,17 @@ export const AppHelpers = (() => {
     });
   };
 
+  const setCharacterId = () => {
+    const characterElements = document.querySelectorAll(".character");
+    characterElements.forEach((characterElement) => {
+      const imageElement = characterElement.querySelector("img");
+      if (imageElement) {
+        const imageName = imageElement.src.split("/").pop().split(".")[0];
+        characterElement.id = imageName;
+      }
+    });
+  };
+
   return {
     startTimer,
     stopTimer,
@@ -208,6 +223,7 @@ export const AppHelpers = (() => {
     updateActiveSlide,
     setBackgroundImage,
     setCharacterIcons,
+    setCharacterId,
   };
 })();
 

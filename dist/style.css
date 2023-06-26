@@ -79,6 +79,7 @@ header .text {
 
 header .grayed-out {
     filter: grayscale(100%);
+    opacity: 0.7
 }
 
 header #dropdownButton {
