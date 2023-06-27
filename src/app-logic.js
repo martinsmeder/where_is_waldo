@@ -6,6 +6,7 @@ export const LocationManager = (() => {
   const backgroundImg = document.getElementById("backgroundImg");
 
   const characters = {
+    // Character array based on values from getCoordinates() and getCoordinateArea()
     bowser: { left: 1430, top: 3130, right: 1730, bottom: 3424 },
     neo: { left: 690, top: 4700, right: 900, bottom: 4900 },
     waldo: { left: 1450, top: 6550, right: 1650, bottom: 6750 },
@@ -95,13 +96,16 @@ export const FirestoreManager = (() => {
 
   const verifyClickedPosition = async (x, y, gameChoice) => {
     try {
+      // Retrieve the character locations collection from Firestore
       const snapshot = await getDocs(collection(db, "characterLocations"));
       let foundCharacter = null;
 
+      // Iterate over each document in the collection
       snapshot.forEach((doc) => {
         const character = doc.id;
         const { left, top, right, bottom } = doc.data();
 
+        // Check if gameChoice and character match the current document
         if (
           (gameChoice === "cyberpunk" &&
             (character === "bowser" ||
@@ -112,12 +116,15 @@ export const FirestoreManager = (() => {
               character === "pikachu" ||
               character === "mike"))
         ) {
+          // Check if the clicked position (x, y) is within the character area
           if (x >= left && x <= right && y >= top && y <= bottom) {
+            // Set the foundCharacter variable to the matching character
             foundCharacter = character;
           }
         }
       });
 
+      // Return the found character (or null if not found)
       return foundCharacter;
     } catch (error) {
       console.error("Error verifying clicked position:", error);
@@ -147,17 +154,22 @@ export const FirestoreManager = (() => {
   // eslint-disable-next-line consistent-return
   const getTop10Times = async (gameChoice) => {
     try {
+      // Retrieve the user times collection for the specified gameChoice from Firestore
       const snapshot = await getDocs(collection(db, `userTimes-${gameChoice}`));
 
       const userTimes = [];
+      // Iterate over each document in the collection
       snapshot.forEach((doc) => {
         const username = doc.id;
         const { time } = doc.data();
+        // Extract the username and time data from each document and add it to the userTimes array
         userTimes.push({ username, time });
       });
 
+      // Sort the userTimes array based on the time in ascending order
       userTimes.sort((a, b) => a.time.localeCompare(b.time));
 
+      // Get the top 10 user times from the sorted array
       const top10UserTimes = userTimes.slice(0, 10);
 
       return top10UserTimes;

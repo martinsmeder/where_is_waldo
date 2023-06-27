@@ -89,15 +89,17 @@ export const AppHelpers = (() => {
     const handleSubmit = async () => {
       const username = usernameInput.value.trim();
       if (username) {
+        // Check if the user already exists in the leaderboard for the given gameChoice
         const userExists = await FirestoreManager.checkUserExists(
           username,
           gameChoice
         );
 
         if (userExists) {
-          return;
+          return; // If the user already exists, return without further action
         }
 
+        // Otherwise do the following things...
         FirestoreManager.storeUserTime(
           username,
           timerElement.textContent,
@@ -133,18 +135,24 @@ export const AppHelpers = (() => {
     slides[currentSlide].classList.remove("active");
 
     if (direction === "left") {
+      // Calculate the index of the slide
       currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      // Slide in from the left
       slides[currentSlide].style.transform = "translateX(-100%)";
       slides[currentSlide].style.opacity = "0";
     } else if (direction === "right") {
+      // Calculate the index of the slide
       currentSlide = (currentSlide + 1) % totalSlides;
+      // Slide in from the right
       slides[currentSlide].style.transform = "translateX(100%)";
       slides[currentSlide].style.opacity = "0";
     }
 
+    // Add the "active" class to the new current slide
     slides[currentSlide].classList.add("active");
 
     setTimeout(() => {
+      // Activate transition and move the current slide to the center
       slides[currentSlide].style.transform = "translateX(0)";
       slides[currentSlide].style.opacity = "1";
     }, 0);
@@ -172,6 +180,7 @@ export const AppHelpers = (() => {
     const gameChoice = Controller.getGameChoice();
 
     const characterData = {
+      // Define the character data for each gameChoice
       cyberpunk: [
         { icon: "../dist/images/bowser.png", title: "Bowser" },
         { icon: "../dist/images/neo.png", title: "Neo" },
@@ -184,8 +193,10 @@ export const AppHelpers = (() => {
       ],
     };
 
+    // Retrieve the character data based on the game choice
     const characters = characterData[gameChoice] || characterData.default;
 
+    // Update the icons and titles of the characters
     characters.forEach((character, index) => {
       icons[index].src = character.icon;
       titles[index].textContent = character.title;

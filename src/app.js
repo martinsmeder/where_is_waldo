@@ -7,7 +7,7 @@
 // 4. ---
 // 5. ---
 // 6. ---
-// 7. Add comments and shrink images
+// 7. Simple improvments (if any) --> add comments --> shrink images
 // 8. Merge and push to gh-pages in a way that works
 
 import { Renderer } from "./render";
@@ -38,8 +38,8 @@ export const Controller = (() => {
   const foundCharacters = [];
 
   const startGame = (event) => {
-    const clickedButton = event.target;
-    gameChoice = clickedButton.dataset.choice;
+    const clickedButton = event.target; // Get clicked button
+    gameChoice = clickedButton.dataset.choice; // Store data attribute value in a variable
 
     if (!isGameStarted) {
       AppHelpers.hideModal(initialModal);
@@ -55,7 +55,7 @@ export const Controller = (() => {
     return gameChoice;
   };
 
-  // Getter function used to return gameChoice from Controller module
+  // Getter function used to expose gameChoice variable to other modules
   const getGameChoice = () => gameChoice;
 
   const resetGame = () => {
@@ -76,6 +76,7 @@ export const Controller = (() => {
   };
 
   const handleContentClick = async (event) => {
+    // Avoid adding circles/popups on header, footer, and overlays
     if (
       !isGameStarted ||
       event.target.closest("header") ||
@@ -86,11 +87,13 @@ export const Controller = (() => {
     }
 
     if (isAddingCircle) {
+      // Render circle/popup
       const { x, y, scaledX, scaledY } = LocationManager.getCoordinates(event);
       Renderer.createCircle(x, y);
       Renderer.createPopup(x, y, foundCharacters);
 
       try {
+        // Check with database if character is within clicked area
         selectedCharacter = await FirestoreManager.verifyClickedPosition(
           scaledX,
           scaledY,
@@ -100,10 +103,12 @@ export const Controller = (() => {
         console.error("Error verifying clicked position:", error);
       }
     } else {
+      // Remove circle/popup
       Renderer.removeCircle();
       Renderer.removePopup();
     }
 
+    // Toggle between adding and removing circles/popups for each click
     isAddingCircle = !isAddingCircle;
     isAddingPopup = !isAddingPopup;
   };
@@ -114,7 +119,10 @@ export const Controller = (() => {
 
     const clickedCharacter = event.target.dataset.character;
 
+    // If the chosen character from the popup (clickedCharacter) is the same as the character
+    // stored in the database (selectedCharacter)...
     if (selectedCharacter === clickedCharacter) {
+      // ... do the following things ...
       const formattedCharacter =
         selectedCharacter.charAt(0).toUpperCase() +
         selectedCharacter.slice(1).toLowerCase();
@@ -133,6 +141,7 @@ export const Controller = (() => {
         AppHelpers.showModal(endgameModal);
       }
     } else {
+      // ... otherwise do this
       Renderer.createFeedbackMsg("Keep looking!", x, y);
     }
 

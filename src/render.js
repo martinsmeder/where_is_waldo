@@ -86,9 +86,12 @@ export const Renderer = (() => {
     const maxX = window.innerWidth - 150;
     const popupX = x + 60;
 
+    // Set the position of the popup based on the coordinates (x, y) of the click event
     if (popupX > maxX) {
+      // Position the popup to the left if clicked position exceeds the maximum x-coordinate
       RendererHelpers.setPosition(popup, x - 160, y - 70);
     } else {
+      // Otherwise position the popup to the right
       RendererHelpers.setPosition(popup, x + 60, y - 70);
     }
 
