@@ -164,13 +164,13 @@ export const AppHelpers = (() => {
 
     switch (gameChoice) {
       case "cyberpunk":
-        backgroundImg.src = "../dist/images/cyberpunk-city.jpg";
+        backgroundImg.src = "images/cyberpunk-city.jpg";
         break;
       case "robot":
-        backgroundImg.src = "../dist/images/robot-city.jpg";
+        backgroundImg.src = "images/robot-city.jpg";
         break;
       default:
-        backgroundImg.src = "../dist/images/cyberpunk-city.jpg";
+        backgroundImg.src = "images/cyberpunk-city.jpg";
     }
   };
 
@@ -182,14 +182,14 @@ export const AppHelpers = (() => {
     const characterData = {
       // Define the character data for each gameChoice
       cyberpunk: [
-        { icon: "../dist/images/bowser.png", title: "Bowser" },
-        { icon: "../dist/images/neo.png", title: "Neo" },
-        { icon: "../dist/images/waldo.png", title: "Waldo" },
+        { icon: "images/bowser.png", title: "Bowser" },
+        { icon: "images/neo.png", title: "Neo" },
+        { icon: "images/waldo.png", title: "Waldo" },
       ],
       robot: [
-        { icon: "../dist/images/meg.png", title: "Meg" },
-        { icon: "../dist/images/pikachu.png", title: "Pikachu" },
-        { icon: "../dist/images/mike.png", title: "Mike" },
+        { icon: "images/meg.png", title: "Meg" },
+        { icon: "images/pikachu.png", title: "Pikachu" },
+        { icon: "images/mike.png", title: "Mike" },
       ],
     };
 
