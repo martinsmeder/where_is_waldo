@@ -62,7 +62,7 @@ export const AppHelpers = (() => {
   };
 
   const clearCharacterIcons = () => {
-    const characterIds = ["bowser", "neo", "waldo"];
+    const characterIds = ["bowser", "neo", "waldo", "meg", "pikachu", "mike"];
     characterIds.forEach((characterId) => {
       const characterElement = document.querySelector(`#${characterId}`);
       if (characterElement) {
@@ -85,8 +85,11 @@ export const AppHelpers = (() => {
 
   const getLeaderboard = (gameChoice, submitButton) => {
     const usernameInput = document.querySelector(".endgame input");
+    const usernameError = document.querySelector("#usernameError");
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (event) => {
+      event.preventDefault(); // Prevent the default form submission behavior
+
       const username = usernameInput.value.trim();
       if (username) {
         // Check if the user already exists in the leaderboard for the given gameChoice
@@ -96,10 +99,12 @@ export const AppHelpers = (() => {
         );
 
         if (userExists) {
-          return; // If the user already exists, return without further action
+          // If the user already exists, display an error message and return without further action
+          usernameError.textContent = `Username "${username}" is already taken!`;
+          return;
         }
 
-        // Otherwise do the following things...
+        // Otherwise, do the following things...
         FirestoreManager.storeUserTime(
           username,
           timerElement.textContent,
@@ -108,13 +113,11 @@ export const AppHelpers = (() => {
         const top10UserTimes = await FirestoreManager.getTop10Times(gameChoice);
         Renderer.createTable(top10UserTimes);
         showModal(document.querySelector(".modal.leaderboard"));
+        hideModal(document.querySelector(".modal.endgame"));
       }
     };
 
-    submitButton.addEventListener("click", () => {
-      handleSubmit();
-      hideModal(document.querySelector(".modal.endgame"));
-    });
+    submitButton.addEventListener("click", handleSubmit);
   };
 
   const updateActiveDot = () => {
