@@ -1,15 +1,4 @@
 /* eslint-disable import/no-cycle */
-
-// TO DO:
-// 1. ---
-// 2. ---
-// 3. ---
-// 4. ---
-// 5. ---
-// 6. ---
-// 7. Simple improvments (if any) --> add comments --> shrink images
-// 8. Merge and push to gh-pages in a way that works
-
 import { Renderer } from "./render";
 import { AppHelpers } from "./utils";
 import { FirestoreManager, LocationManager } from "./app-logic";
@@ -119,7 +108,7 @@ export const Controller = (() => {
 
     const clickedCharacter = event.target.dataset.character;
 
-    // If the chosen character from the popup (clickedCharacter) is the same as the character
+    // If the chosen character from the popup (clickedCharacter) is equal to the character
     // stored in the database (selectedCharacter)...
     if (selectedCharacter === clickedCharacter) {
       // ... do the following things ...
