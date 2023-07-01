@@ -56,31 +56,31 @@ export const Renderer = (() => {
       {
         imageSrc: "images/cyberpunk-slider.jpg",
         characters: [
-          { name: "Bowser", difficulty: "easy", iconSrc: "images/bowser.png" },
-          { name: "Neo", difficulty: "medium", iconSrc: "images/neo.png" },
-          { name: "Waldo", difficulty: "hard", iconSrc: "images/waldo.png" },
+          { name: "Bowser", difficulty: "Easy", iconSrc: "images/bowser.png" },
+          { name: "Neo", difficulty: "Medium", iconSrc: "images/neo.png" },
+          { name: "Waldo", difficulty: "Hard", iconSrc: "images/waldo.png" },
         ],
         startButtonDataChoice: "cyberpunk",
       },
       {
         imageSrc: "images/robot-slider.jpg",
         characters: [
-          { name: "Meg", difficulty: "easy", iconSrc: "images/meg.png" },
+          { name: "Meg", difficulty: "Easy", iconSrc: "images/meg.png" },
           {
             name: "Pikachu",
-            difficulty: "medium",
+            difficulty: "Medium",
             iconSrc: "images/pikachu.png",
           },
-          { name: "Mike", difficulty: "hard", iconSrc: "images/mike.png" },
+          { name: "Mike", difficulty: "Hard", iconSrc: "images/mike.png" },
         ],
         startButtonDataChoice: "robot",
       },
       {
         imageSrc: "images/universe-slider.jpg",
         characters: [
-          { name: "Bravo", difficulty: "easy", iconSrc: "images/bravo.png" },
-          { name: "Sonic", difficulty: "medium", iconSrc: "images/sonic.png" },
-          { name: "Clarke", difficulty: "hard", iconSrc: "images/clarke.png" },
+          { name: "Bravo", difficulty: "Easy", iconSrc: "images/bravo.png" },
+          { name: "Sonic", difficulty: "Medium", iconSrc: "images/sonic.png" },
+          { name: "Clarke", difficulty: "Hard", iconSrc: "images/clarke.png" },
         ],
         startButtonDataChoice: "universe",
       },
@@ -100,7 +100,7 @@ export const Renderer = (() => {
       // Loop through the characters data and create each character
       slideInfo.characters.forEach((character) => {
         const characterDiv = RendererHelpers.createDiv(
-          `sliderCharacter ${character.difficulty}`
+          `sliderCharacter ${character.difficulty.toLowerCase()}`
         );
 
         const icon = document.createElement("img");
