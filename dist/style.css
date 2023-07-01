@@ -225,12 +225,18 @@ footer .card:hover {
     justify-items: center;
 }
 
-#sliderContainer h1 {
+#sliderContainer #headingContainer {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
-    font-size: 2.5rem;
     padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
     text-shadow: 0 0 .3rem #FFF;
+}
+
+#sliderContainer #headingContainer h1 {
+    font-size: 2.5rem;
 }
 
 #sliderContainer .slider {
@@ -242,6 +248,14 @@ footer .card:hover {
     grid-row: 2 / 3;
     font-size: 4rem;
     cursor: pointer;
+}
+
+#sliderContainer .arrow:hover {
+    text-shadow: 0 0 .5rem #FFF;
+}
+
+#sliderContainer .arrow:active {
+    transform: scale(1.3);
 }
 
 #sliderContainer .arrow.left {

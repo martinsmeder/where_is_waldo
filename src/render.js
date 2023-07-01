@@ -111,6 +111,12 @@ export const Renderer = (() => {
         { text: "Pikachu", character: "pikachu" },
         { text: "Mike", character: "mike" },
       ];
+    } else if (gameChoice === "universe") {
+      options = [
+        { text: "Bravo", character: "bravo" },
+        { text: "Sonic", character: "sonic" },
+        { text: "Clarke", character: "clarke" },
+      ];
     }
 
     options.forEach((option) => {

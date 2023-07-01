@@ -13,6 +13,9 @@ export const LocationManager = (() => {
     meg: { left: 256, top: 484, right: 456, bottom: 684 },
     pikachu: { left: 982, top: 1437, right: 1182, bottom: 1637 },
     mike: { left: 1121, top: 1538, right: 1321, bottom: 1738 },
+    bravo: { left: 649, top: 868, right: 849, bottom: 1068 },
+    sonic: { left: 1274, top: 1716, right: 1474, bottom: 1916 },
+    clarke: { left: 1115, top: 1507, right: 1315, bottom: 1707 },
   };
 
   const getCoordinates = (event) => {
@@ -114,7 +117,11 @@ export const FirestoreManager = (() => {
           (gameChoice === "robot" &&
             (character === "meg" ||
               character === "pikachu" ||
-              character === "mike"))
+              character === "mike")) ||
+          (gameChoice === "universe" &&
+            (character === "bravo" ||
+              character === "sonic" ||
+              character === "clarke"))
         ) {
           // Check if the clicked position (x, y) is within the character area
           if (x >= left && x <= right && y >= top && y <= bottom) {

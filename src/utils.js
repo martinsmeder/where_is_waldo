@@ -62,7 +62,17 @@ export const AppHelpers = (() => {
   };
 
   const clearCharacterIcons = () => {
-    const characterIds = ["bowser", "neo", "waldo", "meg", "pikachu", "mike"];
+    const characterIds = [
+      "bowser",
+      "neo",
+      "waldo",
+      "meg",
+      "pikachu",
+      "mike",
+      "bravo",
+      "sonic",
+      "clarke",
+    ];
     characterIds.forEach((characterId) => {
       const characterElement = document.querySelector(`#${characterId}`);
       if (characterElement) {
@@ -172,6 +182,9 @@ export const AppHelpers = (() => {
       case "robot":
         backgroundImg.src = "images/robot-city.jpg";
         break;
+      case "universe":
+        backgroundImg.src = "images/universe-113.jpg";
+        break;
       default:
         backgroundImg.src = "images/cyberpunk-city.jpg";
     }
@@ -193,6 +206,11 @@ export const AppHelpers = (() => {
         { icon: "images/meg.png", title: "Meg" },
         { icon: "images/pikachu.png", title: "Pikachu" },
         { icon: "images/mike.png", title: "Mike" },
+      ],
+      universe: [
+        { icon: "images/bravo.png", title: "Johnny Bravo" },
+        { icon: "images/sonic.png", title: "Sonic" },
+        { icon: "images/clarke.png", title: "Isaac Clarke" },
       ],
     };
 

@@ -9,7 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
-    <!-- LINKS -->
+    <!-- OTHER LINKS -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
     <script src="main.js" defer></script>
 </head>
@@ -20,7 +21,7 @@
         </div>
 
         <div id="content">
-            <!------------------------------------- HEADER  --------------------------------->
+            <!-- HEADER -->
             <header>
                 <h1>FIND US</h1>
 
@@ -59,11 +60,15 @@
                 <h2 id="timer">00:00:00.000</h2>            
             </header>
 
-            <!---------------------------------- SLIDER MODAL  ------------------------------>
+            <!-- SLIDER MODAL -->
             <div class="overlay">
                 <div class="modal initial">
                   <div id="sliderContainer">
-                    <h1>FIND US</h1>
+                    <div id="headingContainer">
+                        <h1>FIND US</h1>
+                        <p>Use arrows to choose game</p>
+                    </div>
+                    
                     <div class="slider">
                         <div class="slide active">
                             <img src="images/cyberpunk-slider.jpg" alt="cyberpunk-city">
@@ -95,36 +100,66 @@
                             </div>
                         </div>
 
-                      <div class="slide">
-                        <img src="images/robot-slider.jpg" alt="robot-city">
-                        <div class="sliderCharacters">
-                            <div class="sliderCharacter easy">
-                                <img src="images/meg.png" class="sliderIcon" alt="Meg">
-                                <div class="text">
-                                    <h3>Meg</h3>
-                                    <p>Easy</p>
+                        <div class="slide">
+                            <img src="images/robot-slider.jpg" alt="robot-city">
+                            <div class="sliderCharacters">
+                                <div class="sliderCharacter easy">
+                                    <img src="images/meg.png" class="sliderIcon" alt="Meg">
+                                    <div class="text">
+                                        <h3>Meg</h3>
+                                        <p>Easy</p>
+                                    </div>
                                 </div>
-                            </div>
-    
-                            <div class="sliderCharacter medium">
-                                <img src="images/pikachu.png" class="sliderIcon" alt="Pikachu">
-                                <div class="text">
-                                    <h3>Pikachu</h3>
-                                    <p>Medium</p>
+        
+                                <div class="sliderCharacter medium">
+                                    <img src="images/pikachu.png" class="sliderIcon" alt="Pikachu">
+                                    <div class="text">
+                                        <h3>Pikachu</h3>
+                                        <p>Medium</p>
+                                    </div>
                                 </div>
-                            </div>
-    
-                            <div class="sliderCharacter hard">
-                                <img src="images/mike.png" class="sliderIcon" alt="Mike">
-                                <div class="text">
-                                    <h3>Mike</h3>
-                                    <p>Hard</p>
+        
+                                <div class="sliderCharacter hard">
+                                    <img src="images/mike.png" class="sliderIcon" alt="Mike">
+                                    <div class="text">
+                                        <h3>Mike</h3>
+                                        <p>Hard</p>
+                                    </div>
                                 </div>
+                                <button class="startButton" data-choice="robot">Start Game</button>
                             </div>
-                            <button class="startButton" data-choice="robot">Start Game</button>
                         </div>
-                        
-                      </div>
+
+                        <div class="slide">
+                            <img src="images/universe-slider.jpg" alt="universe-113">
+                            <div class="sliderCharacters">
+                                <div class="sliderCharacter easy">
+                                    <img src="images/bravo.png" class="sliderIcon" alt="Bravo">
+                                    <div class="text">
+                                        <h3>Bravo</h3>
+                                        <p>Easy</p>
+                                    </div>
+                                </div>
+        
+                                <div class="sliderCharacter medium">
+                                    <img src="images/sonic.png" class="sliderIcon" alt="Sonic">
+                                    <div class="text">
+                                        <h3>Sonic</h3>
+                                        <p>Medium</p>
+                                    </div>
+                                </div>
+        
+                                <div class="sliderCharacter hard">
+                                    <img src="images/clarke.png" class="sliderIcon" alt="Clarke">
+                                    <div class="text">
+                                        <h3>Clarke</h3>
+                                        <p>Hard</p>
+                                    </div>
+                                </div>
+                                <button class="startButton" data-choice="universe">Start Game</button>
+                            </div>
+                        </div>
+
                     </div>
                   
                     <div class="arrow left">&#8249;</div>
@@ -133,12 +168,13 @@
                     <div id="dotContainer">
                       <div class="dot active"></div>
                       <div class="dot"></div>
+                      <div class="dot"></div>
                     </div>
                 </div>
                 </div>
             </div>
               
-            <!---------------------------------- ENDGAME MODAL  ------------------------------>
+            <!-- ENDGAME MODAL -->
             <div class="overlay">
                 <div class="modal endgame">
                   <h3>You found them all!</h3>
@@ -151,7 +187,7 @@
                 </div>
             </div>
 
-            <!------------------------------- LEADERBOARD MODAL  ---------------------------->
+            <!-- LEADERBOARD MODAL -->
             <div class="overlay">
                 <div class="modal leaderboard">
                     <h3 id="leaderboardHeading"></h3>
@@ -171,7 +207,7 @@
                 </div>
             </div>
 
-            <!------------------------------------- FOOTER  --------------------------------->
+            <!-- FOOTER -->
             <footer>
                 <div class="card">
                     <a href="https://github.com/martinsmeder" target="_blank">
