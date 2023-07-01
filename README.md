@@ -10,6 +10,6 @@ Some things I've learned:
 
 - How to use GIMP to create transparent icons and compress image files
 - How to store, retrieve, verify and display data using Firebase's Cloud Firestore
-- How to render and remove content on the users clicked position
+- How to render and remove content at the users clicked position
 - How to structure code according to the DRY (Don't Repeat Yourself) principle
 - How to let the width and height of an image decide the size of the entire web page
