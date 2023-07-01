@@ -114,6 +114,8 @@ export const AppHelpers = (() => {
           return;
         }
 
+        usernameError.textContent = ""; // Clear error message
+
         // Otherwise, do the following things...
         FirestoreManager.storeUserTime(
           username,

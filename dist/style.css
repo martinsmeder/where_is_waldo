@@ -230,7 +230,6 @@ footer .card:hover {
     grid-row: 1 / 2;
     padding-bottom: 20px;
     display: flex;
-    align-items: center;
     gap: 20px;
     text-shadow: 0 0 .3rem #FFF;
 }

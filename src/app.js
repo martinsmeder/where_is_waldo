@@ -8,7 +8,6 @@ export const Controller = (() => {
   const content = document.querySelector("#content");
   const dropdownButton = document.querySelector("#dropdownButton");
   const dropdownMenu = document.querySelector("#dropdownMenu");
-  const startButtons = document.querySelectorAll(".startButton");
   const playAgainButton = document.querySelector("#playAgainButton");
   const submitButton = document.querySelector("#submitUsername");
   const initialModal = document.querySelector(".modal.initial");
@@ -17,7 +16,6 @@ export const Controller = (() => {
   const leftArrow = document.querySelector(".arrow.left");
   const rightArrow = document.querySelector(".arrow.right");
   const usernameInput = document.querySelector(".endgame input");
-  const usernameError = document.querySelector("#usernameError");
 
   let isGameStarted = false;
   let isAddingCircle = false;
@@ -54,7 +52,6 @@ export const Controller = (() => {
     selectedCharacter = null;
     foundCharacters.length = 0;
     usernameInput.value = "";
-    usernameError.textContent = "";
 
     AppHelpers.resetCount();
     AppHelpers.resetTimer();
@@ -138,6 +135,8 @@ export const Controller = (() => {
   };
 
   const init = () => {
+    Renderer.createSlider();
+
     leftArrow.addEventListener("click", () => {
       AppHelpers.updateActiveSlide("left");
       AppHelpers.updateActiveDot();
@@ -162,8 +161,10 @@ export const Controller = (() => {
         : "▼ Show Characters ▼";
     });
 
+    const startButtons = document.querySelectorAll(".startButton");
     startButtons.forEach((button) => {
       button.addEventListener("click", startGame);
+      console.log("clicked");
     });
 
     playAgainButton.addEventListener("click", resetGame);

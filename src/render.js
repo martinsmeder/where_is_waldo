@@ -46,6 +46,102 @@ export const Renderer = (() => {
   const circles = [];
   const popups = [];
 
+  const createSlider = () => {
+    const sliderContainer = document.getElementById("sliderContainer");
+
+    const slider = RendererHelpers.createDiv("slider");
+
+    // Create an array of slide data objects
+    const slideData = [
+      {
+        imageSrc: "images/cyberpunk-slider.jpg",
+        characters: [
+          { name: "Bowser", difficulty: "easy", iconSrc: "images/bowser.png" },
+          { name: "Neo", difficulty: "medium", iconSrc: "images/neo.png" },
+          { name: "Waldo", difficulty: "hard", iconSrc: "images/waldo.png" },
+        ],
+        startButtonDataChoice: "cyberpunk",
+      },
+      {
+        imageSrc: "images/robot-slider.jpg",
+        characters: [
+          { name: "Meg", difficulty: "easy", iconSrc: "images/meg.png" },
+          {
+            name: "Pikachu",
+            difficulty: "medium",
+            iconSrc: "images/pikachu.png",
+          },
+          { name: "Mike", difficulty: "hard", iconSrc: "images/mike.png" },
+        ],
+        startButtonDataChoice: "robot",
+      },
+      {
+        imageSrc: "images/universe-slider.jpg",
+        characters: [
+          { name: "Bravo", difficulty: "easy", iconSrc: "images/bravo.png" },
+          { name: "Sonic", difficulty: "medium", iconSrc: "images/sonic.png" },
+          { name: "Clarke", difficulty: "hard", iconSrc: "images/clarke.png" },
+        ],
+        startButtonDataChoice: "universe",
+      },
+    ];
+
+    // Loop through the slide data and create each slide
+    slideData.forEach((slideInfo) => {
+      const slide = RendererHelpers.createDiv("slide");
+
+      const image = document.createElement("img");
+      image.src = slideInfo.imageSrc;
+      image.alt = slideInfo.imageSrc;
+      slide.appendChild(image);
+
+      const sliderCharacters = RendererHelpers.createDiv("sliderCharacters");
+
+      // Loop through the characters data and create each character
+      slideInfo.characters.forEach((character) => {
+        const characterDiv = RendererHelpers.createDiv(
+          `sliderCharacter ${character.difficulty}`
+        );
+
+        const icon = document.createElement("img");
+        icon.src = character.iconSrc;
+        icon.className = "sliderIcon";
+        icon.alt = character.name;
+        characterDiv.appendChild(icon);
+
+        const textDiv = RendererHelpers.createDiv("text");
+
+        const nameHeading = document.createElement("h3");
+        nameHeading.textContent = character.name;
+        textDiv.appendChild(nameHeading);
+
+        const difficultyParagraph = document.createElement("p");
+        difficultyParagraph.textContent = character.difficulty;
+        textDiv.appendChild(difficultyParagraph);
+
+        characterDiv.appendChild(textDiv);
+        sliderCharacters.appendChild(characterDiv);
+      });
+
+      // Add start button
+      const startButton = document.createElement("button");
+      startButton.className = "startButton";
+      startButton.dataset.choice = slideInfo.startButtonDataChoice;
+      startButton.textContent = "Start Game";
+      sliderCharacters.appendChild(startButton);
+
+      slide.appendChild(sliderCharacters);
+      slider.appendChild(slide);
+
+      // Add active class to initial slide
+      if (slideInfo.startButtonDataChoice === "cyberpunk") {
+        slide.classList.add("active");
+      }
+    });
+
+    sliderContainer.appendChild(slider);
+  };
+
   const createFeedbackMsg = (message, x, y, color = "red") => {
     const feedbackMsg = RendererHelpers.createDiv("feedback", message);
     RendererHelpers.setPosition(feedbackMsg, x - 150, y - 100);
@@ -169,6 +265,7 @@ export const Renderer = (() => {
   };
 
   return {
+    createSlider,
     createFeedbackMsg,
     removeCircle,
     createCircle,
